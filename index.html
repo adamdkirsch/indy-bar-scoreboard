@@ -40,11 +40,11 @@ body{
   display:grid;
   grid-template-rows:12.5vh 27vh 1fr 4.2vh;
   gap:1.15vh;
+
   background:
     radial-gradient(circle at 50% -15%,#17344d 0%,#07111c 46%,#050c13 100%);
 }
 
-/* FIX: fr units prevent the gaps from pushing the right edge wider */
 .topbar{
   display:grid;
   grid-template-columns:25fr 45fr 30fr;
@@ -124,12 +124,33 @@ body{
   margin-top:.25vh;
 }
 
+.weatherMeta{
+  display:flex;
+  align-items:center;
+  gap:.8vw;
+  margin-top:.45vh;
+  font-size:.68vw;
+  color:#9fb0bf;
+  white-space:nowrap;
+}
+
+.sunStatus{
+  display:inline-flex;
+  align-items:center;
+  padding:.18vh .4vw;
+  border:1px solid #42586b;
+  border-radius:999px;
+  font-weight:900;
+  letter-spacing:.07em;
+  color:#d8e4ed;
+}
+
 .hourly{
   display:flex;
   gap:1.1vw;
-  margin-top:.8vh;
+  margin-top:.65vh;
   color:#9fb0bf;
-  font-size:.73vw;
+  font-size:.69vw;
   white-space:nowrap;
   overflow:hidden;
 }
@@ -177,14 +198,9 @@ body{
   color:#7f95a8;
 }
 
-/* FIX: Favorites fills the available section space instead of forcing 22.7vh */
 .favoritesSection{
   display:grid;
   grid-template-rows:auto 1fr;
-}
-
-.favoritesSection .sectionHeader{
-  margin-bottom:.8vh;
 }
 
 .teamGrid{
@@ -198,14 +214,24 @@ body{
 
 .teamCard{
   --team-rgb:143,199,242;
+
   position:relative;
   overflow:hidden;
   min-height:0;
 
+  /*
+     Stronger team-color treatment:
+     obvious at a glance, but still a dark TV interface.
+  */
   background:
-    linear-gradient(180deg,rgba(16,28,40,.98),rgba(8,18,28,.98));
+    linear-gradient(
+      180deg,
+      rgba(var(--team-rgb),.26) 0%,
+      rgba(var(--team-rgb),.12) 38%,
+      rgba(8,18,28,.98) 100%
+    );
 
-  border:1px solid rgba(106,130,150,.48);
+  border:1px solid rgba(var(--team-rgb),.55);
   border-radius:.62vw;
 
   padding:.9vh .72vw .8vh;
@@ -218,27 +244,25 @@ body{
   min-width:0;
 }
 
-.teamCard::before{
+/* team-color accent bar */
+.teamCard::after{
   content:"";
   position:absolute;
-  inset:0;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(var(--team-rgb),.08),
-      transparent 45%
-    );
-
+  top:0;
+  left:0;
+  right:0;
+  height:.32vh;
+  background:rgb(var(--team-rgb));
+  opacity:.9;
   pointer-events:none;
 }
 
 .teamCard.live{
-  border:2px solid rgba(var(--team-rgb),.92);
+  border:2px solid rgba(var(--team-rgb),.96);
 
   box-shadow:
-    0 0 .65vw rgba(var(--team-rgb),.36),
-    inset 0 0 1vw rgba(var(--team-rgb),.08);
+    0 0 .7vw rgba(var(--team-rgb),.42),
+    inset 0 0 1vw rgba(var(--team-rgb),.12);
 }
 
 .teamHeader{
@@ -275,7 +299,6 @@ body{
 .logoFallback{
   width:2.55vw;
   height:2.55vw;
-
   border-radius:50%;
 
   display:none;
@@ -305,7 +328,7 @@ body{
 
 .league{
   font-size:.61vw;
-  color:#8fa2b4;
+  color:#a9bac8;
 
   margin-top:.3vh;
 
@@ -317,13 +340,13 @@ body{
   justify-self:end;
 
   font-size:.58vw;
-
   padding:.27vh .38vw;
+
   border-radius:999px;
+  border:1px solid rgba(180,198,212,.34);
 
-  border:1px solid #405266;
-
-  color:#9cadbc;
+  color:#b1c0cc;
+  background:rgba(5,13,21,.3);
 
   white-space:nowrap;
   font-weight:800;
@@ -331,8 +354,8 @@ body{
 
 .badge.live{
   color:#fff;
-  border-color:rgba(var(--team-rgb),.75);
-  background:rgba(var(--team-rgb),.18);
+  border-color:rgba(var(--team-rgb),.85);
+  background:rgba(var(--team-rgb),.2);
 }
 
 .liveDot{
@@ -353,7 +376,7 @@ body{
   font-size:.9vw;
   font-weight:800;
 
-  color:#d7e0e8;
+  color:#e2e9ef;
 
   white-space:nowrap;
   overflow:hidden;
@@ -370,7 +393,7 @@ body{
 
 .detail{
   font-size:.7vw;
-  color:#9dafbf;
+  color:#a6b6c4;
 }
 
 .network{
@@ -450,9 +473,7 @@ body{
 .gameNetwork{
   font-size:.67vw;
   font-weight:900;
-
   color:var(--blue);
-
   margin-top:.35vh;
 }
 
@@ -517,7 +538,6 @@ body{
 
   display:grid;
   grid-template-columns:1fr auto;
-
   align-items:center;
 }
 
@@ -562,6 +582,14 @@ body{
         <div class="weatherText" id="weatherText">
           Loading weather…
         </div>
+
+        <div class="weatherMeta">
+          <span id="sunriseLine">Sunrise --</span>
+          <span>·</span>
+          <span id="sunsetLine">Sunset --</span>
+          <span class="sunStatus" id="sunStatus">SUN —</span>
+        </div>
+
       </div>
 
     </div>
@@ -676,6 +704,7 @@ const ESPN =
 const NCAA =
   'https://ncaa-api.henrygd.me';
 
+
 const favoriteTeams = [
 
   {
@@ -685,7 +714,10 @@ const favoriteTeams = [
     sport:'baseball',
     league:'mlb',
     id:'10',
-    rgb:'34,66,105'
+    rgb:'34,66,105',
+
+    /* Yankees results stay visible for 10 hours */
+    recentFinalHours:10
   },
 
   {
@@ -695,7 +727,8 @@ const favoriteTeams = [
     sport:'basketball',
     league:'nba',
     id:'11',
-    rgb:'253,187,48'
+    rgb:'253,187,48',
+    recentFinalHours:6
   },
 
   {
@@ -705,7 +738,8 @@ const favoriteTeams = [
     sport:'basketball',
     league:'wnba',
     id:'5',
-    rgb:'238,50,78'
+    rgb:'238,50,78',
+    recentFinalHours:6
   },
 
   {
@@ -715,7 +749,8 @@ const favoriteTeams = [
     sport:'football',
     league:'nfl',
     id:'11',
-    rgb:'0,44,95'
+    rgb:'0,44,95',
+    recentFinalHours:6
   },
 
   {
@@ -725,7 +760,8 @@ const favoriteTeams = [
     sport:'football',
     league:'college-football',
     id:'84',
-    rgb:'153,0,0'
+    rgb:'153,0,0',
+    recentFinalHours:6
   },
 
   {
@@ -735,7 +771,8 @@ const favoriteTeams = [
     sport:'basketball',
     league:'mens-college-basketball',
     id:'84',
-    rgb:'153,0,0'
+    rgb:'153,0,0',
+    recentFinalHours:6
   },
 
   {
@@ -745,7 +782,8 @@ const favoriteTeams = [
     sport:'basketball',
     league:'womens-college-basketball',
     id:'84',
-    rgb:'153,0,0'
+    rgb:'153,0,0',
+    recentFinalHours:6
   },
 
   {
@@ -755,7 +793,8 @@ const favoriteTeams = [
     sport:'football',
     league:'college-football',
     id:'201',
-    rgb:'132,22,23'
+    rgb:'132,22,23',
+    recentFinalHours:6
   },
 
   {
@@ -765,7 +804,8 @@ const favoriteTeams = [
     sport:'basketball',
     league:'mens-college-basketball',
     id:'2752',
-    rgb:'12,35,64'
+    rgb:'12,35,64',
+    recentFinalHours:6
   }
 
 ];
@@ -908,13 +948,114 @@ function weatherLabel(c){
 
 }
 
+
+/*
+ Open-Meteo returns sunrise/sunset as Indianapolis-local
+ ISO strings because the request specifies the Indianapolis
+ timezone. These helpers let us display and compare those
+ without depending on the device's own timezone setting.
+*/
+
+function localTimeMinutes(iso){
+
+  if(!iso)
+    return null;
+
+  const timePart =
+    iso.split('T')[1];
+
+  if(!timePart)
+    return null;
+
+  const parts =
+    timePart.split(':');
+
+  return (
+    Number(parts[0]) * 60 +
+    Number(parts[1])
+  );
+
+}
+
+function currentIndyMinutes(){
+
+  const parts =
+    new Intl.DateTimeFormat(
+      'en-US',
+      {
+        timeZone:TZ,
+        hour:'2-digit',
+        minute:'2-digit',
+        hourCycle:'h23'
+      }
+    )
+    .formatToParts(
+      new Date()
+    );
+
+  const values =
+    Object.fromEntries(
+      parts.map(
+        p => [
+          p.type,
+          p.value
+        ]
+      )
+    );
+
+  return (
+    Number(values.hour) * 60 +
+    Number(values.minute)
+  );
+
+}
+
+function displayLocalIsoTime(iso){
+
+  if(!iso)
+    return '--';
+
+  const timePart =
+    iso.split('T')[1];
+
+  if(!timePart)
+    return '--';
+
+  const bits =
+    timePart.split(':');
+
+  let hour =
+    Number(bits[0]);
+
+  const minute =
+    bits[1];
+
+  const suffix =
+    hour >= 12
+    ?
+    'PM'
+    :
+    'AM';
+
+  hour =
+    hour % 12;
+
+  if(hour===0)
+    hour=12;
+
+  return (
+    `${hour}:${minute} ${suffix}`
+  );
+
+}
+
 async function loadWeather(){
 
   try{
 
     const d =
       await getJSON(
-        'https://api.open-meteo.com/v1/forecast?latitude=39.7684&longitude=-86.1581&current=temperature_2m,apparent_temperature,weather_code&hourly=temperature_2m,precipitation_probability&temperature_unit=fahrenheit&timezone=America%2FIndiana%2FIndianapolis&forecast_days=2'
+        'https://api.open-meteo.com/v1/forecast?latitude=39.7684&longitude=-86.1581&current=temperature_2m,apparent_temperature,weather_code&hourly=temperature_2m,precipitation_probability&daily=sunrise,sunset&temperature_unit=fahrenheit&timezone=America%2FIndiana%2FIndianapolis&forecast_days=2'
       );
 
     const [label,icon] =
@@ -931,14 +1072,66 @@ async function loadWeather(){
     document.getElementById('weatherText').textContent =
       `${label} · Feels like ${Math.round(d.current.apparent_temperature)}°`;
 
+
+    /* Sunrise / sunset */
+
+    const sunrise =
+      d.daily?.sunrise?.[0];
+
+    const sunset =
+      d.daily?.sunset?.[0];
+
+    document.getElementById('sunriseLine').textContent =
+      `Sunrise ${displayLocalIsoTime(sunrise)}`;
+
+    document.getElementById('sunsetLine').textContent =
+      `Sunset ${displayLocalIsoTime(sunset)}`;
+
+    const sunriseMinutes =
+      localTimeMinutes(
+        sunrise
+      );
+
+    const sunsetMinutes =
+      localTimeMinutes(
+        sunset
+      );
+
+    const nowMinutes =
+      currentIndyMinutes();
+
+    const sunUp =
+      sunriseMinutes !== null &&
+      sunsetMinutes !== null &&
+      nowMinutes >= sunriseMinutes &&
+      nowMinutes < sunsetMinutes;
+
+    document.getElementById('sunStatus').textContent =
+      sunUp
+      ?
+      '☀ SUN UP'
+      :
+      '☾ SUN DOWN';
+
+
+    /* Hourly weather */
+
     const out = [];
     const now = Date.now();
 
     for(
       let i=0;
-      i<d.hourly.time.length && out.length<4;
+      i<d.hourly.time.length &&
+      out.length<4;
       i++
     ){
+
+      /*
+        Because these hourly strings are also returned
+        in Indianapolis local time, converting directly
+        through Date is fine for the display on the bar
+        device. The original behavior is otherwise unchanged.
+      */
 
       const x =
         new Date(
@@ -1087,7 +1280,7 @@ function basicNetwork(e){
 
 
 /* ---------------------------
-   BETTER FAVORITE TV LOOKUP
+   FAVORITE TV LOOKUP
 --------------------------- */
 
 const broadcastCache =
@@ -1149,7 +1342,7 @@ function summaryBroadcastNames(summary){
     [...new Set(names)]
       .filter(Boolean)
       .slice(0,2)
-      .join(' / ')
+      .join('/')
   );
 
 }
@@ -1313,7 +1506,16 @@ function saneLive(e){
 
 }
 
-function recentFinal(e){
+
+/*
+ Each favorite team can now have its own
+ completed-game retention window.
+
+ Yankees = 10 hours
+ Everybody else = 6 hours
+*/
+
+function recentFinal(e,hours){
 
   if(
     !completed(e)
@@ -1333,12 +1535,12 @@ function recentFinal(e){
 
   return (
     h >= 0 &&
-    h <= 6
+    h <= hours
   );
 
 }
 
-function chooseEvent(events){
+function chooseEvent(events,team){
 
   const good =
     events.filter(
@@ -1360,10 +1562,19 @@ function chooseEvent(events){
 
   }
 
+
+  const finalHours =
+    team.recentFinalHours ??
+    6;
+
   x =
     good
       .filter(
-        recentFinal
+        e =>
+          recentFinal(
+            e,
+            finalHours
+          )
       )
       .sort(
         (a,b) =>
@@ -1379,6 +1590,7 @@ function chooseEvent(events){
     };
 
   }
+
 
   x =
     good
@@ -1403,6 +1615,7 @@ function chooseEvent(events){
           eDate(a) -
           eDate(b)
       )[0];
+
 
   return (
     x
@@ -1530,7 +1743,8 @@ async function makeFavoriteCards(bundles){
 
         const selected =
           chooseEvent(
-            b.events
+            b.events,
+            b.t
           );
 
         if(!selected)
@@ -2015,8 +2229,6 @@ function normalizeESPN(
         0
       ),
 
-    /* FIX: pro sports never show rankings,
-       and #99 cannot leak through */
     awayRank:
       isCollege
       ?
@@ -2122,7 +2334,6 @@ function normalizeNCAA(w,label){
         0
       ),
 
-    /* FIX: NCAA rankings only display 1–25 */
     awayRank:
       validTop25(
         g.away?.rank
