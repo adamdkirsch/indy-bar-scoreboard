@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indy's Not For Profit Bar</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: #07111c;
+    color: #f4f7fa;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
+
+#dashboard {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 1.4vh 1.5vw 1vh;
+    gap: 1vh;
+    background:
+      radial-gradient(circle at 50% -20%, #17314a 0%, #07111c 45%);
+}
+
+/* HEADER */
+
+.header {
+    height: 13vh;
+    display: grid;
+    grid-template-columns: 25% 45% 30%;
+    align-items: center;
+    border-bottom: 1px solid #425262;
+    padding-bottom: 1vh;
+}
+
+.date {
+    font-size: 1.25vw;
+    opacity: .85;
+}
+
+.time {
+    font-size: 3.5vw;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: .5vh;
+}
+
+.weather {
+    border-left: 1px solid #536372;
+    padding-left: 2vw;
+}
+
+.weather-city {
+    font-size: 1.3vw;
+    font-weight: 700;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+.weather-temp {
+    font-size: 3.1vw;
+    font-weight: 700;
+}
+
+.weather-condition {
+    font-size: 1.1vw;
+}
+
+.forecast {
+    font-size: .95vw;
+    color: #b9c7d4;
+    margin-top: .5vh;
+}
+
+.brand {
+    text-align: right;
+    font-size: 1.35vw;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    color: #c7d7e6;
+}
+
+/* SECTIONS */
+
+.section-title {
+    font-size: 1.05vw;
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    color: #b9c8d5;
+    margin-bottom: .5vh;
+}
+
+/* FAVORITES */
+
+#favorites-section {
+    height: 27vh;
+}
+
+#favorites {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(12vw, 1fr);
+    gap: .6vw;
+    height: 23vh;
+}
+
+.team-card {
+    border: 1px solid #41566a;
+    border-radius: .4vw;
+    background: rgba(12,29,45,.88);
+    padding: 1vh .8vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.team-name {
+    font-size: 1vw;
+    font-weight: 700;
+}
+
+.team-record {
+    font-size: .8vw;
+    color: #aebdca;
+}
+
+.matchup {
+    font-size: 1vw;
+}
+
+.big-score {
+    font-size: 2.5vw;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.game-status {
+    font-size: .9vw;
+    color: #ff6767;
+    font-weight: 700;
+}
+
+.network {
+    font-size: .85vw;
+    color: #8fc7f2;
+    font-weight: 700;
+}
+
+/* MAIN SPORTS AREA */
+
+#sports-area {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1vw;
+    min-height: 0;
+}
+
+.panel {
+    border: 1px solid #34495d;
+    border-radius: .4vw;
+    background: rgba(8,22,35,.84);
+    padding: 1vh 1vw;
+    min-height: 0;
+}
+
+#primary-games {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6vh 1vw;
+}
+
+.game {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: .7vh 0;
+    border-bottom: 1px solid #2f4355;
+}
+
+.game:last-child {
+    border-bottom: none;
+}
+
+.game-teams {
+    font-size: 1.05vw;
+    line-height: 1.45;
+}
+
+.game-right {
+    text-align: right;
+    padding-left: 1vw;
+}
+
+.score {
+    font-size: 1.2vw;
+    font-weight: 700;
+}
+
+.status {
+    font-size: .85vw;
+    color: #ff6565;
+    font-weight: 700;
+}
+
+.tv {
+    font-size: .8vw;
+    color: #8fc7f2;
+    margin-top: .25vh;
+}
+
+/* COMING UP */
+
+.upcoming {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.upcoming-game {
+    padding: .8vh 0;
+    border-bottom: 1px solid #304557;
+}
+
+.upcoming-game:last-child {
+    border-bottom: none;
+}
+
+.upcoming-matchup {
+    font-size: 1vw;
+    font-weight: 700;
+}
+
+.upcoming-info {
+    font-size: .85vw;
+    color: #b8c7d4;
+    margin-top: .3vh;
+}
+
+.upcoming-network {
+    color: #8fc7f2;
+    font-weight: 700;
+}
+
+/* FOOTER */
+
+.footer {
+    height: 4vh;
+    border-top: 1px solid #405264;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    color: #8799aa;
+    font-size: .75vw;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+}
+
+/* MODE SWITCHER */
+
+#modes {
+    position: fixed;
+    left: 1vw;
+    bottom: .5vh;
+    opacity: 0;
+    transition: opacity .2s;
+    z-index: 20;
+}
+
+#modes:hover {
+    opacity: 1;
+}
+
+#modes button {
+    background: #162b3e;
+    color: white;
+    border: 1px solid #53687b;
+    padding: .5em .8em;
+    margin-right: .3em;
+}
+</style>
+</head>
+
+<body>
+
+<div id="dashboard">
+
+    <header class="header">
+        <div>
+            <div class="date" id="date"></div>
+            <div class="time" id="time"></div>
+        </div>
+
+        <div class="weather">
+            <div class="weather-city">Indianapolis</div>
+            <div class="weather-main">
+                <div class="weather-temp">74°</div>
+                <div class="weather-condition">
+                    Partly Cloudy<br>
+                    <span style="color:#aebdca">Feels like 73°</span>
+                </div>
+            </div>
+            <div class="forecast">
+                Noon 76° · 2 PM 79° · 4 PM 80° · Rain 10%
+            </div>
+        </div>
+
+        <div class="brand">
+            Indy's Not For Profit Bar
+        </div>
+    </header>
+
+    <section id="favorites-section">
+        <div class="section-title">Your Teams</div>
+        <div id="favorites"></div>
+    </section>
+
+    <main id="sports-area">
+        <section class="panel">
+            <div class="section-title" id="primary-title">Around Sports</div>
+            <div id="primary-games"></div>
+        </section>
+
+        <section class="panel upcoming">
+            <div class="section-title">Tonight & Coming Up</div>
+            <div id="upcoming"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div>Indianapolis</div>
+        <div>You're a Stranger Here But Once.</div>
+    </footer>
+
+</div>
+
+<div id="modes">
+    <button onclick="render('weekday')">Weekday</button>
+    <button onclick="render('saturday')">CFB Saturday</button>
+    <button onclick="render('sunday')">NFL Sunday</button>
+</div>
+
+<script>
+
+/* CLOCK */
+
+function updateClock() {
+    const now = new Date();
+
+    document.getElementById("date").textContent =
+        now.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        });
+
+    document.getElementById("time").textContent =
+        now.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit"
+        });
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+/*
+  DEMO DATA ONLY.
+
+  Eventually this object will be replaced by live feeds.
+  Teams outside their active season / without a game in
+  the next 14 days will simply not be returned.
+*/
+
+const favorites = [
+    {
+        team: "YANKEES",
+        record: "84–64",
+        matchup: "vs Boston",
+        score: "5 – 3",
+        status: "TOP 7TH",
+        network: "YES"
+    },
+    {
+        team: "FEVER",
+        record: "24–17",
+        matchup: "vs Chicago",
+        score: "78 – 71",
+        status: "FINAL",
+        network: "ESPN"
+    },
+    {
+        team: "COLTS",
+        record: "1–0",
+        matchup: "vs Ravens",
+        score: "SUN · 1:00 PM",
+        status: "NEXT GAME",
+        network: "CBS"
+    },
+    {
+        team: "INDIANA FOOTBALL",
+        record: "#5 · 2–0",
+        matchup: "vs Howard",
+        score: "SAT · 12:00",
+        status: "NEXT GAME",
+        network: "BTN"
+    },
+    {
+        team: "OKLAHOMA FOOTBALL",
+        record: "#11 · 2–0",
+        matchup: "at Michigan",
+        score: "SAT · 12:00",
+        status: "NEXT GAME",
+        network: "FOX"
+    }
+];
+
+const modes = {
+
+weekday: {
+    title: "Around Sports",
+    games: [
+        ["Phillies 6<br>Braves 2", "FINAL", "MLB"],
+        ["Dodgers 3<br>Padres 1", "TOP 6TH", "MLB"],
+        ["49ers<br>Rams", "8:35 PM", "NBC"],
+        ["Liberty<br>Aces", "10:00 PM", "ESPN"]
+    ]
+},
+
+saturday: {
+    title: "Around College Football",
+    games: [
+        ["#6 Oregon<br>Oklahoma State", "12:00 PM", "FOX"],
+        ["#11 Oklahoma<br>Michigan", "12:00 PM", "FOX"],
+        ["#5 Indiana<br>Howard", "12:00 PM", "BTN"],
+        ["#12 Alabama<br>Kentucky", "3:30 PM", "ABC"],
+        ["#1 Ohio State<br>#4 Texas", "7:30 PM", "NBC"],
+        ["Iowa State<br>#21 Iowa", "7:30 PM", "CBS"],
+        ["#18 Tennessee<br>Georgia Tech", "7:00 PM", "ESPN"],
+        ["Arkansas<br>#20 Utah", "10:15 PM", "ESPN"]
+    ]
+},
+
+sunday: {
+    title: "Around the NFL",
+    games: [
+        ["Ravens<br>Colts", "1:00 PM", "CBS"],
+        ["Bills<br>Texans", "1:00 PM", "CBS"],
+        ["Saints<br>Lions", "1:00 PM", "FOX"],
+        ["Buccaneers<br>Bengals", "1:00 PM", "FOX"],
+        ["Packers<br>Vikings", "4:25 PM", "FOX"],
+        ["Commanders<br>Eagles", "4:25 PM", "CBS"],
+        ["Cowboys<br>Giants", "8:20 PM", "NBC"]
+    ]
+}
+
+};
+
+const comingUp = [
+    ["Oklahoma at Michigan", "Saturday · 12:00 PM", "FOX"],
+    ["Indiana vs Howard", "Saturday · 12:00 PM", "BTN"],
+    ["Ohio State at Texas", "Saturday · 7:30 PM", "NBC"],
+    ["Ravens at Colts", "Sunday · 1:00 PM", "CBS"],
+    ["Cowboys at Giants", "Sunday · 8:20 PM", "NBC"]
+];
+
+function renderFavorites() {
+
+    const container = document.getElementById("favorites");
+    container.innerHTML = "";
+
+    favorites.forEach(g => {
+
+        const card = document.createElement("div");
+        card.className = "team-card";
+
+        card.innerHTML = `
+            <div>
+                <div class="team-name">${g.team}</div>
+                <div class="team-record">${g.record}</div>
+            </div>
+
+            <div class="matchup">${g.matchup}</div>
+
+            <div class="big-score">${g.score}</div>
+
+            <div>
+                <div class="game-status">${g.status}</div>
+                <div class="network">${g.network}</div>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+function renderUpcoming() {
+
+    const container = document.getElementById("upcoming");
+    container.innerHTML = "";
+
+    comingUp.forEach(g => {
+
+        const div = document.createElement("div");
+        div.className = "upcoming-game";
+
+        div.innerHTML = `
+            <div class="upcoming-matchup">${g[0]}</div>
+            <div class="upcoming-info">
+                ${g[1]} ·
+                <span class="upcoming-network">${g[2]}</span>
+            </div>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+function render(mode) {
+
+    const data = modes[mode];
+
+    document.getElementById("primary-title").textContent = data.title;
+
+    const container = document.getElementById("primary-games");
+    container.innerHTML = "";
+
+    data.games.forEach(g => {
+
+        const div = document.createElement("div");
+        div.className = "game";
+
+        div.innerHTML = `
+            <div class="game-teams">${g[0]}</div>
+
+            <div class="game-right">
+                <div class="status">${g[1]}</div>
+                <div class="tv">${g[2]}</div>
+            </div>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+/* Automatically choose a useful starting layout */
+
+function defaultMode() {
+
+    const day = new Date().getDay();
+
+    if (day === 6) return "saturday";
+    if (day === 0) return "sunday";
+
+    return "weekday";
+}
+
+renderFavorites();
+renderUpcoming();
+render(defaultMode());
+
+</script>
+
+</body>
+</html>
