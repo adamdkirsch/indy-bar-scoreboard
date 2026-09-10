@@ -4,7 +4,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Indy's Not For Profit Bar</title>
-
 <style>
   :root{
     --bg:#07111c;
@@ -16,243 +15,72 @@
     --blue:#8fc7f2;
     --live:#ff5a62;
   }
-
   *{box-sizing:border-box}
-
-  html,body{
-    width:100%;
-    height:100%;
-    margin:0;
-  }
-
+  html,body{width:100%;height:100%;margin:0}
   body{
-    background:var(--bg);
-    color:var(--text);
+    background:var(--bg);color:var(--text);
     font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     overflow:hidden;
   }
-
   .app{
-    width:100vw;
-    height:100vh;
-    min-height:650px;
+    width:100vw;height:100vh;min-height:650px;
     padding:1.7vh 1.5vw 1.2vh;
-    display:grid;
-    grid-template-rows:12.5vh 27vh 1fr 4.2vh;
-    gap:1.5vh;
-    background:
-      radial-gradient(circle at 50% -15%,#17344d 0%,#07111c 46%,#050c13 100%);
+    display:grid;grid-template-rows:12.5vh 27vh 1fr 4.2vh;gap:1.5vh;
+    background:radial-gradient(circle at 50% -15%,#17344d 0%,#07111c 46%,#050c13 100%);
   }
-
-  .topbar{
-    display:grid;
-    grid-template-columns:25fr 45fr 30fr;
-    gap:.8vw;
-    min-height:0;
-    width:100%;
+  .topbar{display:grid;grid-template-columns:25fr 45fr 30fr;gap:.8vw;min-height:0;width:100%}
+  .topbox,.brandbox,.section,.footer{
+    background:linear-gradient(180deg,rgba(18,31,45,.96),rgba(9,20,31,.96));
+    border:1px solid var(--line);border-radius:.75vw;
   }
-
-  .topbox,
-  .brandbox,
-  .section,
-  .footer{
-    background:
-      linear-gradient(180deg,rgba(18,31,45,.96),rgba(9,20,31,.96));
-    border:1px solid var(--line);
-    border-radius:.75vw;
-  }
-
-  .topbox{
-    padding:1.2vh 1.05vw;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-  }
-
-  .brandbox{
-    padding:1.2vh 1.2vw;
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    text-align:right;
-  }
-
-  .date{
-    font-size:1vw;
-    color:#b5c2ce;
-    font-weight:750;
-    letter-spacing:.03em;
-  }
-
-  .time{
-    font-size:2.9vw;
-    font-weight:850;
-    line-height:1;
-    margin-top:.45vh;
-    letter-spacing:-.03em;
-  }
-
-  /* WEATHER */
+  .topbox{padding:1.2vh 1.05vw;display:flex;flex-direction:column;justify-content:center}
+  .brandbox{padding:1.2vh 1.2vw;display:flex;align-items:center;justify-content:flex-end;text-align:right}
+  .date{font-size:1.0vw;color:#b5c2ce;font-weight:750;letter-spacing:.03em}
+  .time{font-size:2.9vw;font-weight:850;line-height:1;margin-top:.45vh;letter-spacing:-.03em}
 
   .weatherBox{
     --weather-rgb:143,199,242;
-    position:relative;
-    overflow:hidden;
+    position:relative;overflow:hidden;
     border-color:rgba(var(--weather-rgb),.42);
     background:
-      radial-gradient(
-        circle at 22% 40%,
-        rgba(var(--weather-rgb),.13),
-        transparent 42%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(18,31,45,.96),
-        rgba(9,20,31,.96)
-      );
+      radial-gradient(circle at 22% 40%,rgba(var(--weather-rgb),.13),transparent 42%),
+      linear-gradient(180deg,rgba(18,31,45,.96),rgba(9,20,31,.96));
   }
-
   .weatherBox::after{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    height:.28vh;
-    background:rgb(var(--weather-rgb));
-    opacity:.72;
+    content:"";position:absolute;left:0;right:0;top:0;height:.28vh;
+    background:rgb(var(--weather-rgb));opacity:.72;
   }
+  .weatherRow{display:flex;align-items:center;gap:1vw;position:relative;z-index:1}
+  .weatherIcon{font-size:2.3vw;width:2.9vw;text-align:center;filter:drop-shadow(0 0 .35vw rgba(var(--weather-rgb),.35))}
+  .temp{font-size:2.65vw;font-weight:850;line-height:1;text-shadow:0 0 .75vw rgba(var(--weather-rgb),.28)}
+  .weatherCity{font-size:1.1vw;font-weight:800}
+  .weatherText{font-size:.92vw;color:#c1cbd4;margin-top:.25vh}
+  .hourly{display:flex;gap:1.0vw;margin-top:.62vh;color:#9fb0bf;font-size:.69vw;white-space:nowrap;position:relative;z-index:1}
+  .sunLine{display:flex;gap:1vw;margin-top:.45vh;font-size:.64vw;color:#9fb0bf;position:relative;z-index:1}
+  .sunStatus{font-weight:900;color:#e8bd72;letter-spacing:.06em}
 
-  .weatherRow{
-    display:flex;
-    align-items:center;
-    gap:1vw;
-    position:relative;
-    z-index:1;
-  }
+  .brandMain{font-size:1.3vw;font-weight:850;letter-spacing:.18em;text-transform:uppercase;color:#d8e8f6}
+  .brandSub{font-size:.68vw;color:#7f95a8;margin-top:.45vh;letter-spacing:.18em;text-transform:uppercase}
 
-  .weatherIcon{
-    font-size:2.3vw;
-    width:2.9vw;
-    text-align:center;
-    filter:
-      drop-shadow(0 0 .35vw rgba(var(--weather-rgb),.35));
-  }
-
-  .temp{
-    font-size:2.65vw;
-    font-weight:850;
-    line-height:1;
-    text-shadow:
-      0 0 .75vw rgba(var(--weather-rgb),.28);
-  }
-
-  .weatherCity{
-    font-size:1.1vw;
-    font-weight:800;
-  }
-
-  .weatherText{
-    font-size:.92vw;
-    color:#c1cbd4;
-    margin-top:.25vh;
-  }
-
-  .hourly{
-    display:flex;
-    gap:1vw;
-    margin-top:.62vh;
-    color:#9fb0bf;
-    font-size:.69vw;
-    white-space:nowrap;
-    position:relative;
-    z-index:1;
-  }
-
-  .sunLine{
-    display:flex;
-    gap:1vw;
-    margin-top:.45vh;
-    font-size:.64vw;
-    color:#9fb0bf;
-    position:relative;
-    z-index:1;
-  }
-
-  .sunStatus{
-    font-weight:900;
-    color:#e8bd72;
-    letter-spacing:.06em;
-  }
-
-  /* BRAND */
-
-  .brandMain{
-    font-size:1.3vw;
-    font-weight:850;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:#d8e8f6;
-  }
-
-  .brandSub{
-    font-size:.68vw;
-    color:#7f95a8;
-    margin-top:.45vh;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-  }
-
-  /* SECTIONS */
-
-  .section{
-    padding:1.05vh .9vw;
-    min-height:0;
-  }
-
-  .favoritesSection{
-    display:grid;
-    grid-template-rows:auto 1fr;
-    min-height:0;
-  }
-
-  .sectionHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:.8vh;
-  }
-
-  .sectionTitle{
-    font-size:.9vw;
-    text-transform:uppercase;
-    letter-spacing:.18em;
-    color:#b8c5d1;
-    font-weight:850;
-  }
-
-  .sectionNote{
-    font-size:.68vw;
-    color:#7f95a8;
-  }
-
-  /* FAVORITE TEAM CARDS */
+  .section{padding:1.05vh .9vw;min-height:0}
+  .favoritesSection{display:grid;grid-template-rows:auto 1fr;min-height:0}
+  .sectionHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8vh}
+  .sectionTitle{font-size:.9vw;text-transform:uppercase;letter-spacing:.18em;color:#b8c5d1;font-weight:850}
+  .sectionNote{font-size:.68vw;color:#7f95a8}
 
   .teamGrid{
     display:grid;
-    grid-template-columns:
-      repeat(var(--team-count,5),minmax(0,1fr));
+    grid-template-columns:repeat(var(--team-count,5),minmax(0,1fr));
     gap:.55vw;
     min-height:0;
     height:auto;
-    padding-bottom:.08vh;
+    padding-bottom:.08vh
   }
 
   .teamCard{
     --team-rgb:143,199,242;
     position:relative;
     overflow:hidden;
-
     background:
       linear-gradient(
         180deg,
@@ -260,52 +88,32 @@
         rgba(var(--team-rgb),.12) 38%,
         rgba(8,18,28,.98) 100%
       );
-
     border:1px solid rgba(var(--team-rgb),.55);
     border-radius:.62vw;
     padding:1vh .72vw .85vh;
-
     display:flex;
     flex-direction:column;
     justify-content:space-between;
     text-align:center;
     min-width:0;
-
-    transition:
-      border-color .2s,
-      box-shadow .2s,
-      transform .2s;
+    transition:border-color .2s,box-shadow .2s,transform .2s;
   }
-
   .teamCard::before{
     content:"";
     position:absolute;
     inset:0;
-    background:
-      linear-gradient(
-        180deg,
-        rgba(var(--team-rgb),.08),
-        transparent 45%
-      );
+    background:linear-gradient(180deg,rgba(var(--team-rgb),.08),transparent 45%);
     pointer-events:none;
   }
-
   .teamCard::after{
     content:"";
     position:absolute;
-    top:0;
-    left:0;
-    right:0;
+    top:0;left:0;right:0;
     height:.32vh;
     background:rgb(var(--team-rgb));
     opacity:.9;
     pointer-events:none;
   }
-
-  /*
-    Women's college basketball:
-    lighter / inverted treatment for immediate recognition.
-  */
 
   .teamCard.women{
     background:
@@ -315,47 +123,23 @@
         rgba(230,226,216,.90) 48%,
         rgba(20,27,34,.96) 100%
       );
-
-    border-color:
-      rgba(var(--team-rgb),.80);
+    border-color:rgba(var(--team-rgb),.80);
   }
-
   .teamCard.women .teamName,
-  .teamCard.women .match{
-    color:#17212b;
-  }
-
-  .teamCard.women .league{
-    color:#4f5c68;
-  }
-
+  .teamCard.women .match{color:#17212b}
+  .teamCard.women .league{color:#4f5c68}
   .teamCard.women .badge{
     color:#25303a;
     border-color:rgba(var(--team-rgb),.5);
-    background:rgba(255,255,255,.46);
+    background:rgba(255,255,255,.46)
   }
-
-  .teamCard.women .bigScore{
-    color:#111a22;
-    text-shadow:
-      0 1px 0 rgba(255,255,255,.35);
-  }
-
-  .teamCard.women .detail{
-    color:#384653;
-  }
-
-  .teamCard.women .network{
-    color:rgb(var(--team-rgb));
-  }
-
-  .teamCard.women .teamLogoWrap{
-    background:rgba(255,255,255,.76);
-  }
+  .teamCard.women .bigScore{color:#111a22;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+  .teamCard.women .detail{color:#384653}
+  .teamCard.women .network{color:rgb(var(--team-rgb))}
+  .teamCard.women .teamLogoWrap{background:rgba(255,255,255,.76)}
 
   .teamCard.live{
     border:2px solid rgba(var(--team-rgb),.92);
-
     box-shadow:
       0 0 .72vw rgba(var(--team-rgb),.42),
       inset 0 0 1vw rgba(var(--team-rgb),.10);
@@ -364,53 +148,40 @@
   .teamHeader{
     position:relative;
     display:grid;
-    grid-template-columns:3vw 1fr 3vw;
+    grid-template-columns:3.0vw 1fr 3.0vw;
     align-items:start;
     gap:.35vw;
-    min-height:4vh;
+    min-height:4.0vh
   }
-
   .teamLogoWrap{
-    width:3vw;
-    height:3vw;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    width:3vw;height:3vw;
+    display:flex;align-items:center;justify-content:center;
     background:rgba(245,248,251,.92);
     border-radius:.48vw;
-    padding:.22vw;
+    padding:.22vw
   }
-
   .teamLogo{
     max-width:2.65vw;
     max-height:2.65vw;
     object-fit:contain;
-    filter:
-      drop-shadow(0 2px 4px rgba(0,0,0,.4));
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))
   }
-
-  .teamIdentity{
-    min-width:0;
-    padding-top:.15vh;
-  }
-
+  .teamIdentity{min-width:0;padding-top:.15vh}
   .teamName{
     font-size:.88vw;
     font-weight:900;
     line-height:1.05;
     white-space:nowrap;
     overflow:hidden;
-    text-overflow:ellipsis;
+    text-overflow:ellipsis
   }
-
   .league{
     font-size:.61vw;
     color:#8fa2b4;
     margin-top:.3vh;
     text-transform:uppercase;
-    letter-spacing:.1em;
+    letter-spacing:.1em
   }
-
   .sportMark{
     display:inline-block;
     margin-left:.32vw;
@@ -420,9 +191,8 @@
     font-size:.54vw;
     font-weight:950;
     letter-spacing:.08em;
-    vertical-align:.05em;
+    vertical-align:.05em
   }
-
   .badge{
     justify-self:end;
     font-size:.58vw;
@@ -432,29 +202,23 @@
     color:#9cadbc;
     white-space:nowrap;
     font-weight:800;
-    letter-spacing:.04em;
+    letter-spacing:.04em
   }
-
   .badge.live{
     color:#fff;
     border-color:rgba(var(--team-rgb),.75);
-    background:rgba(var(--team-rgb),.18);
+    background:rgba(var(--team-rgb),.18)
   }
-
   .liveDot{
     display:inline-block;
-    width:.38vw;
-    height:.38vw;
-    min-width:5px;
-    min-height:5px;
+    width:.38vw;height:.38vw;
+    min-width:5px;min-height:5px;
     border-radius:50%;
     background:var(--live);
     margin-right:.22vw;
     vertical-align:.03em;
-    box-shadow:
-      0 0 .35vw rgba(255,90,98,.55);
+    box-shadow:0 0 .35vw rgba(255,90,98,.55)
   }
-
   .match{
     position:relative;
     font-size:.9vw;
@@ -463,36 +227,25 @@
     margin-top:.35vh;
     white-space:nowrap;
     overflow:hidden;
-    text-overflow:ellipsis;
+    text-overflow:ellipsis
   }
-
   .bigScore{
     position:relative;
     font-size:1.85vw;
     font-weight:900;
     line-height:1.03;
     letter-spacing:-.03em;
-    margin:.3vh 0;
+    margin:.3vh 0
   }
-
-  .meta{
-    position:relative;
-  }
-
-  .detail{
-    font-size:.72vw;
-    color:#9dafbf;
-    line-height:1.25;
-  }
-
+  .meta{position:relative}
+  .detail{font-size:.72vw;color:#9dafbf;line-height:1.25}
   .network{
     font-size:.72vw;
     font-weight:900;
     color:var(--blue);
     letter-spacing:.05em;
-    margin-top:.35vh;
+    margin-top:.35vh
   }
-
   .emptyTeams{
     height:100%;
     display:flex;
@@ -501,29 +254,22 @@
     color:#8195a7;
     font-size:1vw;
     border:1px dashed #33475b;
-    border-radius:.62vw;
+    border-radius:.62vw
   }
-
-  /* LOWER AREA */
 
   .main{
     min-height:0;
     display:grid;
     grid-template-columns:1.7fr .9fr;
-    gap:.8vw;
+    gap:.8vw
   }
-
-  .aroundSection,
-  .comingSection{
-    overflow:hidden;
-  }
+  .aroundSection,.comingSection{overflow:hidden}
 
   .gameList{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:.65vh .55vw;
+    gap:.65vh .55vw
   }
-
   .gameCard{
     background:#0b1621;
     border:1px solid #2f4254;
@@ -531,51 +277,73 @@
     padding:.8vh .65vw;
     min-height:7.5vh;
     display:grid;
-    grid-template-columns:1fr auto;
-    gap:.5vw;
+    grid-template-columns:2.45vw 1fr auto;
+    gap:.55vw;
+    align-items:center
+  }
+  .gameCard.live{
+    border-color:rgba(143,199,242,.88);
+    box-shadow:
+      0 0 .6vw rgba(143,199,242,.24),
+      inset 0 0 .8vw rgba(143,199,242,.06)
+  }
+
+  .leagueLogoWrap{
+    width:2.25vw;
+    height:2.25vw;
+    border-radius:.42vw;
+    background:rgba(245,248,251,.92);
+    display:flex;
     align-items:center;
+    justify-content:center;
+    padding:.22vw;
+    overflow:hidden
+  }
+  .leagueLogo{
+    max-width:1.88vw;
+    max-height:1.88vw;
+    object-fit:contain
+  }
+  .leagueLogoFallback{
+    display:none;
+    font-size:.48vw;
+    font-weight:950;
+    color:#162331;
+    text-align:center;
+    line-height:1
   }
 
-  .gameTeams{
-    font-size:.84vw;
-    font-weight:850;
-    line-height:1.22;
-  }
-
+  .gameTeams{font-size:.84vw;font-weight:850;line-height:1.22}
   .gameContext{
-    font-size:.63vw;
-    color:#8498aa;
+    font-size:.69vw;
+    color:#c5d1db;
+    font-weight:760;
     margin-top:.35vh;
+    letter-spacing:.015em
   }
+  .gameContext .aroundLive{color:#fff;font-weight:950}
+  .gameContext .aroundLive .liveDot{margin-right:.18vw}
 
-  .gameRight{
-    text-align:right;
-  }
-
-  .gameScore{
-    font-size:1.2vw;
-    font-weight:900;
-  }
-
+  .gameRight{text-align:right}
+  .gameScore{font-size:1.2vw;font-weight:900}
   .gameStatus{
-    font-size:.62vw;
-    color:#9badbc;
-    margin-top:.25vh;
+    font-size:.68vw;
+    color:#c5d1db;
+    font-weight:760;
+    margin-top:.25vh
   }
-
   .gameNetwork{
     font-size:.67vw;
     font-weight:900;
     color:var(--blue);
-    margin-top:.35vh;
+    margin-top:.35vh
   }
 
   .comingList{
     display:flex;
     flex-direction:column;
-    gap:.55vh;
+    gap:.55vh
   }
-
   .comingItem{
     display:grid;
     grid-template-columns:3.3vw 1fr auto;
@@ -584,30 +352,12 @@
     padding:.65vh .6vw;
     border:1px solid #2f4254;
     border-radius:.5vw;
-    background:#0b1621;
+    background:#0b1621
   }
-
-  .comingTime{
-    font-weight:900;
-    font-size:.72vw;
-  }
-
-  .comingTeams{
-    font-size:.75vw;
-    font-weight:800;
-  }
-
-  .comingNetwork{
-    font-size:.68vw;
-    font-weight:900;
-    color:var(--blue);
-  }
-
-  .tiny{
-    font-size:.6vw;
-    color:#8498aa;
-    margin-top:.18vh;
-  }
+  .comingTime{font-weight:900;font-size:.72vw}
+  .comingTeams{font-size:.75vw;font-weight:800}
+  .comingNetwork{font-size:.68vw;font-weight:900;color:var(--blue)}
+  .tiny{font-size:.6vw;color:#8498aa;margin-top:.18vh}
 
   .phaseMsg{
     height:100%;
@@ -618,31 +368,34 @@
     color:#7890a3;
     font-size:.86vw;
     line-height:1.5;
-    padding:2vw;
+    padding:2vw
   }
-
-  /* FOOTER */
 
   .footer{
     padding:.6vh .8vw;
     display:grid;
     grid-template-columns:1fr auto;
     align-items:center;
-    gap:1vw;
+    gap:1vw
   }
-
   .footerLeft{
     font-size:.65vw;
     color:#73899b;
-    letter-spacing:.05em;
+    letter-spacing:.05em
   }
-
   .footerRight{
     font-size:.72vw;
     font-weight:850;
     letter-spacing:.16em;
     text-transform:uppercase;
-    color:#a9b9c6;
+    color:#a9b9c6
+  }
+
+  @media(max-width:1100px){
+    .app{min-height:560px}
+    .teamName{font-size:1vw}
+    .match{font-size:1vw}
+    .detail,.network{font-size:.78vw}
   }
 
   .logoFallback{
@@ -656,225 +409,94 @@
     font-weight:900;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.18);
-    color:#fff;
-  }
-
-  @media(max-width:1100px){
-    .app{
-      min-height:560px;
-    }
-
-    .teamName{
-      font-size:1vw;
-    }
-
-    .match{
-      font-size:1vw;
-    }
-
-    .detail,
-    .network{
-      font-size:.78vw;
-    }
+    color:#fff
   }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
   <div class="topbar">
-
     <div class="topbox">
       <div class="date" id="dateLine">—</div>
       <div class="time" id="timeLine">—</div>
     </div>
 
-    <div
-      class="topbox weatherBox"
-      id="weatherBox"
-    >
+    <div class="topbox weatherBox" id="weatherBox">
       <div class="weatherRow">
-
-        <div
-          class="weatherIcon"
-          id="weatherIcon"
-        >
-          ◌
-        </div>
-
-        <div
-          class="temp"
-          id="temp"
-        >
-          --°
-        </div>
-
+        <div class="weatherIcon" id="weatherIcon">◌</div>
+        <div class="temp" id="temp">--°</div>
         <div>
-          <div class="weatherCity">
-            Indianapolis
-          </div>
-
-          <div
-            class="weatherText"
-            id="weatherText"
-          >
-            Loading weather…
-          </div>
+          <div class="weatherCity">Indianapolis</div>
+          <div class="weatherText" id="weatherText">Loading weather…</div>
         </div>
-
       </div>
-
-      <div
-        class="hourly"
-        id="hourly"
-      ></div>
-
+      <div class="hourly" id="hourly"></div>
       <div class="sunLine">
-        <span id="sunrise">
-          Sunrise —
-        </span>
-
-        <span id="sunset">
-          Sunset —
-        </span>
-
-        <span
-          class="sunStatus"
-          id="sunStatus"
-        >
-          —
-        </span>
+        <span id="sunrise">Sunrise —</span>
+        <span id="sunset">Sunset —</span>
+        <span class="sunStatus" id="sunStatus">—</span>
       </div>
-
     </div>
 
     <div class="brandbox">
       <div>
-        <div class="brandMain">
-          Indy’s Not For Profit Bar
-        </div>
-
-        <div class="brandSub">
-          Sports · Weather · What’s On
-        </div>
+        <div class="brandMain">Indy’s Not For Profit Bar</div>
+        <div class="brandSub">Sports · Weather · What’s On</div>
       </div>
     </div>
-
   </div>
 
   <section class="section favoritesSection">
-
     <div class="sectionHeader">
-      <div class="sectionTitle">
-        Your Teams
-      </div>
-
-      <div
-        class="sectionNote"
-        id="teamStatus"
-      >
-        Loading live schedules…
-      </div>
+      <div class="sectionTitle">Your Teams</div>
+      <div class="sectionNote" id="teamStatus">Loading live schedules…</div>
     </div>
-
-    <div
-      class="teamGrid"
-      id="teamGrid"
-    ></div>
-
+    <div class="teamGrid" id="teamGrid"></div>
   </section>
 
   <div class="main">
 
     <section class="section aroundSection">
-
       <div class="sectionHeader">
-        <div
-          class="sectionTitle"
-          id="aroundTitle"
-        >
-          Around Sports
-        </div>
-
-        <div class="sectionNote">
-          Seasonal relevance
-        </div>
+        <div class="sectionTitle" id="aroundTitle">Around Sports</div>
+        <div class="sectionNote">Seasonal relevance engine comes next</div>
       </div>
-
-      <div
-        class="gameList"
-        id="gameList"
-      ></div>
-
+      <div class="gameList" id="gameList"></div>
     </section>
 
     <section class="section comingSection">
-
       <div class="sectionHeader">
-        <div class="sectionTitle">
-          Favorite Teams · Coming Up
-        </div>
-
-        <div class="sectionNote">
-          Next seven days
-        </div>
+        <div class="sectionTitle">On Deck</div>
+        <div class="sectionNote" id="onDeckNote">Overflow · Coming up</div>
       </div>
-
-      <div
-        class="comingList"
-        id="comingList"
-      ></div>
-
+      <div class="comingList" id="comingList"></div>
     </section>
 
   </div>
 
   <div class="footer">
-
-    <div
-      class="footerLeft"
-      id="footerLeft"
-    >
+    <div class="footerLeft" id="footerLeft">
       Weather: Open-Meteo · Favorites: ESPN · Around Sports: ESPN + NCAA · Refreshes automatically
     </div>
-
-    <div class="footerRight">
-      You’re a Stranger Here But Once.
-    </div>
-
+    <div class="footerRight">You’re a Stranger Here But Once.</div>
   </div>
 
 </div>
 
 <script>
-
-const TZ =
-  'America/Indiana/Indianapolis';
-
-const ESPN_BASE =
-  'https://site.api.espn.com/apis/site/v2/sports';
-
-const NCAA_BASE =
-  'https://ncaa-api.henrygd.me';
+const TZ = 'America/Indiana/Indianapolis';
+const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports';
+const NCAA_BASE = 'https://ncaa-api.henrygd.me';
 
 const LIVE_SANITY_HOURS = 12;
-const ACTIVE_WINDOW_DAYS = 14;
+const ACTIVE_WINDOW_DAYS = 7;
+const BROADCAST_CACHE_MS = 30*60*1000;
 
-const BROADCAST_CACHE_MS =
-  30 * 60 * 1000;
-
-const broadcastCache =
-  new Map();
-
-
-/* =========================================================
-   FAVORITE TEAMS
-   ========================================================= */
+const broadcastCache = new Map();
 
 const favoriteTeams = [
-
   {
     key:'yankees',
     name:'Yankees',
@@ -886,10 +508,8 @@ const favoriteTeams = [
     teamId:'10',
     rgb:'34,66,105',
     recentFinalHours:16,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/mlb/500/nyy.png'
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/mlb/500/nyy.png'
   },
-
   {
     key:'pacers',
     name:'Pacers',
@@ -900,11 +520,9 @@ const favoriteTeams = [
     league:'nba',
     teamId:'11',
     rgb:'253,187,48',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/nba/500/ind.png'
+    recentFinalHours:16,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/nba/500/ind.png'
   },
-
   {
     key:'fever',
     name:'Fever',
@@ -915,11 +533,9 @@ const favoriteTeams = [
     league:'wnba',
     teamId:'5',
     rgb:'238,50,78',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/wnba/500/ind.png'
+    recentFinalHours:16,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/wnba/500/ind.png'
   },
-
   {
     key:'colts',
     name:'Colts',
@@ -930,9 +546,8 @@ const favoriteTeams = [
     league:'nfl',
     teamId:'11',
     rgb:'0,44,95',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/nfl/500/ind.png'
+    recentFinalHours:24,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/nfl/500/ind.png'
   },
 
   {
@@ -946,11 +561,9 @@ const favoriteTeams = [
     league:'college-football',
     teamId:'84',
     rgb:'153,0,0',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/84.png'
+    recentFinalHours:24,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/84.png'
   },
-
   {
     key:'iumbb',
     name:'Indiana',
@@ -962,11 +575,9 @@ const favoriteTeams = [
     league:'mens-college-basketball',
     teamId:'84',
     rgb:'153,0,0',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/84.png'
+    recentFinalHours:16,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/84.png'
   },
-
   {
     key:'iuwbb',
     name:'Indiana',
@@ -979,9 +590,8 @@ const favoriteTeams = [
     league:'womens-college-basketball',
     teamId:'84',
     rgb:'153,0,0',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/84.png'
+    recentFinalHours:16,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/84.png'
   },
 
   {
@@ -995,11 +605,9 @@ const favoriteTeams = [
     league:'college-football',
     teamId:'201',
     rgb:'132,22,23',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/201.png'
+    recentFinalHours:24,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/201.png'
   },
-
   {
     key:'oumbb',
     name:'Oklahoma',
@@ -1011,11 +619,9 @@ const favoriteTeams = [
     league:'mens-college-basketball',
     teamId:'201',
     rgb:'132,22,23',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/201.png'
+    recentFinalHours:16,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/201.png'
   },
-
   {
     key:'ouwbb',
     name:'Oklahoma',
@@ -1028,9 +634,8 @@ const favoriteTeams = [
     league:'womens-college-basketball',
     teamId:'201',
     rgb:'132,22,23',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/201.png'
+    recentFinalHours:16,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/201.png'
   },
 
   {
@@ -1044,9 +649,8 @@ const favoriteTeams = [
     league:'mens-college-basketball',
     teamId:'2752',
     rgb:'12,35,64',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/2752.png'
+    recentFinalHours:16,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/2752.png'
   },
 
   {
@@ -1060,20 +664,12 @@ const favoriteTeams = [
     league:'college-football',
     teamId:'89',
     rgb:'198,17,42',
-    recentFinalHours:6,
-    fallbackLogo:
-      'https://a.espncdn.com/i/teamlogos/ncaa/500/89.png'
+    recentFinalHours:24,
+    fallbackLogo:'https://a.espncdn.com/i/teamlogos/ncaa/500/89.png'
   }
-
 ];
 
-
-/* =========================================================
-   DATE / TIME
-   ========================================================= */
-
 function fmtDate(d){
-
   return new Intl.DateTimeFormat(
     'en-US',
     {
@@ -1084,12 +680,9 @@ function fmtDate(d){
       year:'numeric'
     }
   ).format(d);
-
 }
 
-
 function fmtTime(d){
-
   return new Intl.DateTimeFormat(
     'en-US',
     {
@@ -1098,282 +691,112 @@ function fmtTime(d){
       minute:'2-digit'
     }
   ).format(d);
-
 }
-
 
 function fmtShortDateTime(d){
+  const now=new Date();
 
-  const now =
-    new Date();
+  const day=new Intl.DateTimeFormat(
+    'en-US',
+    {timeZone:TZ,weekday:'short'}
+  ).format(d);
 
-  const day =
-    new Intl.DateTimeFormat(
-      'en-US',
-      {
-        timeZone:TZ,
-        weekday:'short'
-      }
-    ).format(d);
+  const time=new Intl.DateTimeFormat(
+    'en-US',
+    {timeZone:TZ,hour:'numeric',minute:'2-digit'}
+  ).format(d);
 
-  const time =
-    new Intl.DateTimeFormat(
-      'en-US',
-      {
-        timeZone:TZ,
-        hour:'numeric',
-        minute:'2-digit'
-      }
-    ).format(d);
+  const md=new Intl.DateTimeFormat(
+    'en-US',
+    {timeZone:TZ,month:'short',day:'numeric'}
+  ).format(d);
 
-  const md =
-    new Intl.DateTimeFormat(
-      'en-US',
-      {
-        timeZone:TZ,
-        month:'short',
-        day:'numeric'
-      }
-    ).format(d);
+  const dateKey=x=>new Intl.DateTimeFormat(
+    'en-CA',
+    {
+      timeZone:TZ,
+      year:'numeric',
+      month:'2-digit',
+      day:'2-digit'
+    }
+  ).format(x);
 
-  const dateKey =
-    x => new Intl.DateTimeFormat(
-      'en-CA',
-      {
-        timeZone:TZ,
-        year:'numeric',
-        month:'2-digit',
-        day:'2-digit'
-      }
-    ).format(x);
+  if(dateKey(d)===dateKey(now)) return `Today · ${time}`;
 
-  if(dateKey(d) === dateKey(now)){
-    return `Today · ${time}`;
-  }
-
-  const tomorrow =
-    new Date(
-      now.getTime() + 86400000
-    );
-
-  if(dateKey(d) === dateKey(tomorrow)){
-    return `Tomorrow · ${time}`;
-  }
+  const tomorrow=new Date(now.getTime()+86400000);
+  if(dateKey(d)===dateKey(tomorrow)) return `Tomorrow · ${time}`;
 
   return `${day}, ${md} · ${time}`;
-
 }
-
 
 function updateClock(){
-
-  const now =
-    new Date();
-
-  document
-    .getElementById('dateLine')
-    .textContent =
-      fmtDate(now);
-
-  document
-    .getElementById('timeLine')
-    .textContent =
-      fmtTime(now);
-
+  const n=new Date();
+  document.getElementById('dateLine').textContent=fmtDate(n);
+  document.getElementById('timeLine').textContent=fmtTime(n);
 }
-
 
 updateClock();
+setInterval(updateClock,1000);
 
-setInterval(
-  updateClock,
-  1000
-);
-
-
-/* =========================================================
-   WEATHER
-   ========================================================= */
 
 function weatherLabel(code){
-
-  if(code === 0)
-    return ['Clear','☀'];
-
-  if([1,2].includes(code))
-    return ['Partly Cloudy','⛅'];
-
-  if(code === 3)
-    return ['Cloudy','☁'];
-
-  if([45,48].includes(code))
-    return ['Fog','≋'];
-
-  if(
-    [51,53,55,56,57]
-      .includes(code)
-  )
-    return ['Drizzle','🌦'];
-
-  if(
-    [
-      61,63,65,66,67,
-      80,81,82
-    ].includes(code)
-  )
-    return ['Rain','🌧'];
-
-  if(
-    [
-      71,73,75,77,
-      85,86
-    ].includes(code)
-  )
-    return ['Snow','❄'];
-
-  if(
-    [95,96,99]
-      .includes(code)
-  )
-    return ['Thunderstorms','⛈'];
-
+  if(code===0) return ['Clear','☀'];
+  if([1,2].includes(code)) return ['Partly Cloudy','⛅'];
+  if(code===3) return ['Cloudy','☁'];
+  if([45,48].includes(code)) return ['Fog','≋'];
+  if([51,53,55,56,57].includes(code)) return ['Drizzle','🌦'];
+  if([61,63,65,66,67,80,81,82].includes(code)) return ['Rain','🌧'];
+  if([71,73,75,77,85,86].includes(code)) return ['Snow','❄'];
+  if([95,96,99].includes(code)) return ['Thunderstorms','⛈'];
   return ['Conditions','◌'];
-
 }
-
 
 function weatherAccent(code){
-
-  /* sunny / clear */
-  if(code === 0)
-    return '232,190,88';
-
-  /* cloudy / fog */
-  if(
-    [1,2,3,45,48]
-      .includes(code)
-  )
-    return '151,181,205';
-
-  /* rain */
-  if(
-    [
-      51,53,55,56,57,
-      61,63,65,66,67,
-      80,81,82
-    ].includes(code)
-  )
-    return '74,153,211';
-
-  /* snow */
-  if(
-    [
-      71,73,75,77,
-      85,86
-    ].includes(code)
-  )
-    return '176,220,239';
-
-  /* storms */
-  if(
-    [95,96,99]
-      .includes(code)
-  )
-    return '150,123,213';
-
+  if(code===0) return '232,190,88';
+  if([1,2,3,45,48].includes(code)) return '151,181,205';
+  if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return '74,153,211';
+  if([71,73,75,77,85,86].includes(code)) return '176,220,239';
+  if([95,96,99].includes(code)) return '150,123,213';
   return '143,199,242';
-
 }
-
 
 function indyClockMinutes(){
+  const parts=new Intl.DateTimeFormat(
+    'en-US',
+    {
+      timeZone:TZ,
+      hour:'2-digit',
+      minute:'2-digit',
+      hour12:false
+    }
+  ).formatToParts(new Date());
 
-  const parts =
-    new Intl.DateTimeFormat(
-      'en-US',
-      {
-        timeZone:TZ,
-        hour:'2-digit',
-        minute:'2-digit',
-        hour12:false
-      }
-    ).formatToParts(
-      new Date()
-    );
-
-  const values =
-    Object.fromEntries(
-      parts.map(
-        p => [p.type,p.value]
-      )
-    );
-
-  return (
-    Number(values.hour) * 60 +
-    Number(values.minute)
-  );
-
+  const o=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+  return Number(o.hour)*60+Number(o.minute);
 }
-
 
 function localIsoMinutes(iso){
-
-  const match =
-    String(iso || '')
-      .match(
-        /T(\d{2}):(\d{2})/
-      );
-
-  if(!match)
-    return null;
-
-  return (
-    Number(match[1]) * 60 +
-    Number(match[2])
-  );
-
+  const m=String(iso||'').match(/T(\d{2}):(\d{2})/);
+  return m ? Number(m[1])*60+Number(m[2]) : null;
 }
-
 
 function formatLocalIsoTime(iso){
+  const mins=localIsoMinutes(iso);
+  if(mins==null) return '—';
 
-  const mins =
-    localIsoMinutes(iso);
+  let h=Math.floor(mins/60);
+  const m=mins%60;
+  const suffix=h>=12?'PM':'AM';
+  const h12=h%12||12;
 
-  if(mins == null)
-    return '—';
-
-  let h =
-    Math.floor(mins / 60);
-
-  const m =
-    mins % 60;
-
-  const suffix =
-    h >= 12
-      ? 'PM'
-      : 'AM';
-
-  const h12 =
-    h % 12 || 12;
-
-  return (
-    `${h12}:` +
-    `${String(m).padStart(2,'0')} ` +
-    suffix
-  );
-
+  return `${h12}:${String(m).padStart(2,'0')} ${suffix}`;
 }
 
-
 async function loadWeather(){
-
   try{
-
-    const url =
-      'https://api.open-meteo.com/v1/forecast' +
-      '?latitude=39.7684' +
-      '&longitude=-86.1581' +
+    const url=
+      'https://api.open-meteo.com/v1/forecast?' +
+      'latitude=39.7684&longitude=-86.1581' +
       '&current=temperature_2m,apparent_temperature,weather_code' +
       '&hourly=temperature_2m,precipitation_probability,weather_code' +
       '&daily=sunrise,sunset' +
@@ -1381,596 +804,376 @@ async function loadWeather(){
       '&timezone=America%2FIndiana%2FIndianapolis' +
       '&forecast_days=2';
 
-    const response =
-      await fetch(
-        url,
-        {
-          cache:'no-store'
-        }
-      );
+    const r=await fetch(url,{cache:'no-store'});
+    if(!r.ok) throw new Error('weather');
 
-    if(!response.ok)
-      throw new Error(
-        'weather'
-      );
-
-    const weather =
-      await response.json();
-
-    const [
-      label,
-      icon
-    ] =
-      weatherLabel(
-        weather.current.weather_code
-      );
+    const w=await r.json();
+    const [label,icon]=weatherLabel(w.current.weather_code);
 
     document
       .getElementById('weatherBox')
       .style
-      .setProperty(
-        '--weather-rgb',
-        weatherAccent(
-          weather.current.weather_code
-        )
-      );
+      .setProperty('--weather-rgb',weatherAccent(w.current.weather_code));
 
-    document
-      .getElementById('temp')
-      .textContent =
-        `${Math.round(
-          weather.current.temperature_2m
-        )}°`;
+    document.getElementById('temp').textContent=
+      `${Math.round(w.current.temperature_2m)}°`;
 
-    document
-      .getElementById('weatherIcon')
-      .textContent =
-        icon;
+    document.getElementById('weatherIcon').textContent=icon;
 
-    document
-      .getElementById('weatherText')
-      .textContent =
-        `${label} · Feels like ` +
-        `${Math.round(
-          weather.current.apparent_temperature
-        )}°`;
+    document.getElementById('weatherText').textContent=
+      `${label} · Feels like ${Math.round(w.current.apparent_temperature)}°`;
 
-    const now =
-      Date.now();
+    const now=Date.now();
+    const points=[];
 
-    const points =
-      [];
+    for(let i=0;i<w.hourly.time.length && points.length<4;i++){
+      const x=new Date(w.hourly.time[i]);
 
-    for(
-      let i=0;
-      i<weather.hourly.time.length &&
-      points.length<4;
-      i++
-    ){
-
-      const when =
-        new Date(
-          weather.hourly.time[i]
-        );
-
-      if(
-        when.getTime() >
-        now
-      ){
-
+      if(x.getTime()>now){
         points.push({
-          time:when,
-          temp:
-            weather.hourly
-              .temperature_2m[i],
-          rain:
-            weather.hourly
-              .precipitation_probability[i]
+          t:x,
+          temp:w.hourly.temperature_2m[i],
+          rain:w.hourly.precipitation_probability[i]
         });
+      }
+    }
 
+    document.getElementById('hourly').innerHTML=
+      points.map((p,i)=>{
+        const h=new Intl.DateTimeFormat(
+          'en-US',
+          {timeZone:TZ,hour:'numeric'}
+        ).format(p.t);
+
+        return `<span>${h} ${Math.round(p.temp)}°${
+          i===0 && p.rain!=null ? ` · Rain ${p.rain}%` : ''
+        }</span>`;
+      }).join('');
+
+    const rise=w.daily?.sunrise?.[0];
+    const set=w.daily?.sunset?.[0];
+
+    document.getElementById('sunrise').textContent=
+      `Sunrise ${formatLocalIsoTime(rise)}`;
+
+    document.getElementById('sunset').textContent=
+      `Sunset ${formatLocalIsoTime(set)}`;
+
+    const n=indyClockMinutes();
+    const rmin=localIsoMinutes(rise);
+    const smin=localIsoMinutes(set);
+
+    const up=
+      rmin!=null &&
+      smin!=null &&
+      n>=rmin &&
+      n<smin;
+
+    document.getElementById('sunStatus').textContent=
+      up ? '☀ SUN UP' : '☾ SUN DOWN';
+
+  }catch(e){
+    document.getElementById('weatherText').textContent=
+      'Weather temporarily unavailable';
+
+    document.getElementById('hourly').innerHTML='';
+  }
+}
+
+
+function competition(ev){
+  return ev?.competitions?.[0] || {};
+}
+
+function eventDate(ev){
+  return new Date(ev?.date || competition(ev)?.date || 0);
+}
+
+function eventState(ev){
+  return (
+    competition(ev)?.status?.type?.state ||
+    ev?.status?.type?.state ||
+    ''
+  );
+}
+
+function isCompleted(ev){
+  return !!(
+    competition(ev)?.status?.type?.completed ||
+    ev?.status?.type?.completed
+  );
+}
+
+function findCompetitor(ev,id){
+  return (competition(ev).competitors||[])
+    .find(c=>String(c.team?.id)===String(id));
+}
+
+function otherCompetitor(ev,id){
+  return (competition(ev).competitors||[])
+    .find(c=>String(c.team?.id)!==String(id));
+}
+
+function scoreValue(c){
+  return typeof c?.score==='object'
+    ? (c.score.displayValue ?? c.score.value ?? '')
+    : (c?.score ?? '');
+}
+
+function statusText(ev){
+  return (
+    competition(ev)?.status?.type?.shortDetail ||
+    competition(ev)?.status?.type?.detail ||
+    ev?.status?.type?.shortDetail ||
+    ''
+  );
+}
+
+
+function isSaneLive(ev){
+  if(eventState(ev)!=='in') return false;
+
+  const start=eventDate(ev).getTime();
+  if(!start) return false;
+
+  const delta=(Date.now()-start)/3600000;
+
+  return delta>=-1 && delta<=LIVE_SANITY_HOURS;
+}
+
+function isRecentFinal(ev,hours=6){
+  if(!isCompleted(ev)) return false;
+
+  const start=eventDate(ev).getTime();
+  if(!start) return false;
+
+  return (
+    (Date.now()-start)>=0 &&
+    (Date.now()-start)<=hours*3600000
+  );
+}
+
+function isUpcomingWithin(ev,days=ACTIVE_WINDOW_DAYS){
+  if(isCompleted(ev) || eventState(ev)==='in') return false;
+
+  const when=eventDate(ev).getTime();
+
+  return (
+    when>=Date.now()-3600000 &&
+    when<=Date.now()+days*86400000
+  );
+}
+
+
+/*
+  Football is intentionally near-persistent while in season.
+  This prevents a bye week or longer scheduling gap from making
+  a football favorite disappear simply because its next game is
+  more than seven days away.
+*/
+function indyMonth(){
+  return Number(
+    new Intl.DateTimeFormat(
+      'en-US',
+      {timeZone:TZ,month:'numeric'}
+    ).format(new Date())
+  );
+}
+
+function footballSeasonActive(team){
+  if(team?.sport!=='football') return false;
+
+  const month=indyMonth();
+
+  // NFL: August through February.
+  if(team.league==='nfl'){
+    return month>=8 || month<=2;
+  }
+
+  // College football: August through January.
+  return month>=8 || month<=1;
+}
+
+function isEligibleUpcoming(ev,team){
+  if(isCompleted(ev) || eventState(ev)==='in') return false;
+
+  const when=eventDate(ev).getTime();
+
+  if(!when || when<Date.now()-3600000) return false;
+
+  if(footballSeasonActive(team)){
+    return true;
+  }
+
+  return isUpcomingWithin(ev,ACTIVE_WINDOW_DAYS);
+}
+
+
+function networkOf(ev){
+  if(ev?._resolvedNetwork) return ev._resolvedNetwork;
+
+  const arr=
+    competition(ev).broadcasts ||
+    ev?.broadcasts ||
+    [];
+
+  const names=[];
+
+  for(const b of arr){
+    for(const n of (b.names||[])){
+      names.push(n);
+    }
+
+    if(b.name) names.push(b.name);
+
+    if(b.market?.type && b.media?.shortName){
+      names.push(b.media.shortName);
+    }
+  }
+
+  const unique=[
+    ...new Set(names.filter(Boolean))
+  ];
+
+  return unique.slice(0,2).join(' / ') || 'TV TBD';
+}
+
+
+function opponentText(ev,id){
+  const me=findCompetitor(ev,id);
+  const opp=otherCompetitor(ev,id);
+
+  if(!opp) return '';
+
+  const prefix=
+    me?.homeAway==='home'
+      ? 'vs.'
+      : 'at';
+
+  return `${prefix} ${
+    opp.team?.shortDisplayName ||
+    opp.team?.displayName ||
+    opp.team?.name ||
+    'Opponent'
+  }`;
+}
+
+
+function extractRecord(recordJson,teamJson){
+  const candidates=[];
+
+  function walkItems(items){
+    if(!Array.isArray(items)) return;
+
+    for(const item of items){
+      if(item?.summary){
+        candidates.push({
+          summary:item.summary,
+          type:item.type||item.name||''
+        });
       }
 
+      if(
+        item?.displayValue &&
+        /overall|total/i.test(item?.name||item?.type||'')
+      ){
+        candidates.push({
+          summary:item.displayValue,
+          type:item.type||item.name||''
+        });
+      }
+
+      if(item?.stats){
+        const statMap={};
+
+        for(const s of item.stats){
+          statMap[
+            (s.name||s.abbreviation||'').toLowerCase()
+          ]=s.value ?? s.displayValue;
+        }
+
+        const wins=statMap.wins ?? statMap.w;
+        const losses=statMap.losses ?? statMap.l;
+        const ties=statMap.ties ?? statMap.t;
+
+        if(wins!=null && losses!=null){
+          candidates.push({
+            summary:
+              `${wins}-${losses}${ties ? `-${ties}` : ''}`,
+            type:item.type||item.name||''
+          });
+        }
+      }
     }
-
-    document
-      .getElementById('hourly')
-      .innerHTML =
-        points.map(
-          (point,index) => {
-
-            const hour =
-              new Intl.DateTimeFormat(
-                'en-US',
-                {
-                  timeZone:TZ,
-                  hour:'numeric'
-                }
-              ).format(
-                point.time
-              );
-
-            return (
-              `<span>` +
-              `${hour} ` +
-              `${Math.round(point.temp)}°` +
-              `${
-                index === 0 &&
-                point.rain != null
-                  ? ` · Rain ${point.rain}%`
-                  : ''
-              }` +
-              `</span>`
-            );
-
-          }
-        ).join('');
-
-    const sunrise =
-      weather.daily
-        ?.sunrise
-        ?.[0];
-
-    const sunset =
-      weather.daily
-        ?.sunset
-        ?.[0];
-
-    document
-      .getElementById('sunrise')
-      .textContent =
-        `Sunrise ` +
-        formatLocalIsoTime(
-          sunrise
-        );
-
-    document
-      .getElementById('sunset')
-      .textContent =
-        `Sunset ` +
-        formatLocalIsoTime(
-          sunset
-        );
-
-    const nowMinutes =
-      indyClockMinutes();
-
-    const riseMinutes =
-      localIsoMinutes(
-        sunrise
-      );
-
-    const setMinutes =
-      localIsoMinutes(
-        sunset
-      );
-
-    const sunUp =
-      riseMinutes != null &&
-      setMinutes != null &&
-      nowMinutes >= riseMinutes &&
-      nowMinutes < setMinutes;
-
-    document
-      .getElementById('sunStatus')
-      .textContent =
-        sunUp
-          ? '☀ SUN UP'
-          : '☾ SUN DOWN';
-
-  }
-  catch(error){
-
-    document
-      .getElementById('weatherText')
-      .textContent =
-        'Weather temporarily unavailable';
-
-    document
-      .getElementById('hourly')
-      .innerHTML =
-        '';
-
   }
 
-}
+  walkItems(recordJson?.items);
+  walkItems(recordJson?.record?.items);
+  walkItems(recordJson?.team?.record?.items);
+  walkItems(teamJson?.team?.record?.items);
 
-
-/* =========================================================
-   ESPN EVENT HELPERS
-   ========================================================= */
-
-function competition(event){
-
-  return (
-    event?.competitions?.[0] ||
-    {}
-  );
-
-}
-
-
-function eventDate(event){
-
-  return new Date(
-    event?.date ||
-    competition(event)?.date ||
-    0
-  );
-
-}
-
-
-function eventState(event){
-
-  return (
-    competition(event)
-      ?.status
-      ?.type
-      ?.state ||
-
-    event
-      ?.status
-      ?.type
-      ?.state ||
-
-    ''
-  );
-
-}
-
-
-function isCompleted(event){
-
-  return !!(
-    competition(event)
-      ?.status
-      ?.type
-      ?.completed ||
-
-    event
-      ?.status
-      ?.type
-      ?.completed
-  );
-
-}
-
-
-function findCompetitor(
-  event,
-  id
-){
-
-  return (
-    competition(event)
-      .competitors ||
-    []
-  ).find(
-    competitor =>
-      String(
-        competitor.team?.id
-      ) ===
-      String(id)
-  );
-
-}
-
-
-function otherCompetitor(
-  event,
-  id
-){
-
-  return (
-    competition(event)
-      .competitors ||
-    []
-  ).find(
-    competitor =>
-      String(
-        competitor.team?.id
-      ) !==
-      String(id)
-  );
-
-}
-
-
-function scoreValue(
-  competitor
-){
-
-  if(
-    typeof competitor?.score
-      === 'object'
-  ){
-
-    return (
-      competitor.score.displayValue ??
-      competitor.score.value ??
-      ''
-    );
-
+  if(teamJson?.team?.recordSummary){
+    candidates.push({
+      summary:teamJson.team.recordSummary,
+      type:'overall'
+    });
   }
 
-  return (
-    competitor?.score ??
-    ''
-  );
+  const preferred=
+    candidates.find(x=>/overall|total/i.test(x.type)) ||
+    candidates[0];
 
+  return preferred?.summary || '';
 }
 
 
-function statusText(event){
-
+function teamLogo(teamJson,t){
   return (
-    competition(event)
-      ?.status
-      ?.type
-      ?.shortDetail ||
-
-    competition(event)
-      ?.status
-      ?.type
-      ?.detail ||
-
-    event
-      ?.status
-      ?.type
-      ?.shortDetail ||
-
-    ''
+    teamJson?.team?.logos?.[0]?.href ||
+    teamJson?.team?.logo ||
+    t.fallbackLogo
   );
-
-}
-
-
-function isSaneLive(event){
-
-  if(
-    eventState(event) !== 'in'
-  )
-    return false;
-
-  const start =
-    eventDate(event)
-      .getTime();
-
-  if(!start)
-    return false;
-
-  const delta =
-    (
-      Date.now() -
-      start
-    ) /
-    3600000;
-
-  return (
-    delta >= -1 &&
-    delta <= LIVE_SANITY_HOURS
-  );
-
-}
-
-
-function isRecentFinal(
-  event,
-  hours=6
-){
-
-  if(
-    !isCompleted(event)
-  )
-    return false;
-
-  const start =
-    eventDate(event)
-      .getTime();
-
-  if(!start)
-    return false;
-
-  const age =
-    Date.now() -
-    start;
-
-  return (
-    age >= 0 &&
-    age <=
-      hours *
-      3600000
-  );
-
-}
-
-
-function isUpcomingWithin(
-  event,
-  days=ACTIVE_WINDOW_DAYS
-){
-
-  if(
-    isCompleted(event) ||
-    eventState(event) === 'in'
-  )
-    return false;
-
-  const when =
-    eventDate(event)
-      .getTime();
-
-  return (
-    when >=
-      Date.now() -
-      3600000 &&
-
-    when <=
-      Date.now() +
-      days *
-      86400000
-  );
-
-}
-
-
-/* =========================================================
-   BROADCAST / TV NETWORK
-   ========================================================= */
-
-function networkOf(event){
-
-  if(
-    event?._resolvedNetwork
-  )
-    return event._resolvedNetwork;
-
-  const broadcasts =
-    competition(event)
-      .broadcasts ||
-
-    event?.broadcasts ||
-
-    [];
-
-  const names =
-    [];
-
-  for(
-    const broadcast
-    of broadcasts
-  ){
-
-    for(
-      const name
-      of broadcast.names || []
-    ){
-      names.push(name);
-    }
-
-    if(
-      broadcast.name
-    ){
-      names.push(
-        broadcast.name
-      );
-    }
-
-    if(
-      broadcast.market?.type &&
-      broadcast.media?.shortName
-    ){
-
-      names.push(
-        broadcast.media.shortName
-      );
-
-    }
-
-  }
-
-  const unique =
-    [
-      ...new Set(
-        names.filter(Boolean)
-      )
-    ];
-
-  return (
-    unique
-      .slice(0,2)
-      .join(' / ') ||
-    'TV TBD'
-  );
-
 }
 
 
 async function fetchJson(url){
+  const r=await fetch(url,{cache:'no-store'});
 
-  const response =
-    await fetch(
-      url,
-      {
-        cache:'no-store'
-      }
-    );
-
-  if(
-    !response.ok
-  ){
-
-    throw new Error(
-      `${response.status} ${url}`
-    );
-
+  if(!r.ok){
+    throw new Error(`${r.status} ${url}`);
   }
 
-  return (
-    response.json()
-  );
-
+  return r.json();
 }
 
 
-async function fallbackNetworkForEvent(
-  team,
-  event
-){
-
-  if(
-    !event?.id ||
-    networkOf(event) !== 'TV TBD'
-  ){
-
-    return (
-      networkOf(event)
-    );
-
+async function fallbackNetworkForEvent(t,ev){
+  if(!ev?.id || networkOf(ev)!=='TV TBD'){
+    return networkOf(ev);
   }
 
-  const cached =
-    broadcastCache.get(
-      String(event.id)
-    );
+  const cached=broadcastCache.get(String(ev.id));
 
   if(
     cached &&
-    Date.now() -
-      cached.at <
-      BROADCAST_CACHE_MS
+    Date.now()-cached.at<BROADCAST_CACHE_MS
   ){
-
-    return (
-      cached.network
-    );
-
+    return cached.network;
   }
 
   try{
+    const data=await fetchJson(
+      `${ESPN_BASE}/${t.sport}/${t.league}/summary?event=${ev.id}`
+    );
 
-    const data =
-      await fetchJson(
-        `${ESPN_BASE}/` +
-        `${team.sport}/` +
-        `${team.league}/` +
-        `summary?event=${event.id}`
-      );
-
-    const headerEvent = {
-      competitions:
-        data?.header
-          ?.competitions ||
-        []
+    const headerEvent={
+      competitions:data?.header?.competitions||[]
     };
 
-    const network =
-      networkOf(
-        headerEvent
-      );
+    const network=networkOf(headerEvent);
 
     broadcastCache.set(
-      String(event.id),
+      String(ev.id),
       {
         at:Date.now(),
         network
@@ -1979,11 +1182,9 @@ async function fallbackNetworkForEvent(
 
     return network;
 
-  }
-  catch(error){
-
+  }catch(e){
     broadcastCache.set(
-      String(event.id),
+      String(ev.id),
       {
         at:Date.now(),
         network:'TV TBD'
@@ -1991,1109 +1192,465 @@ async function fallbackNetworkForEvent(
     );
 
     return 'TV TBD';
-
   }
-
 }
 
 
-/* =========================================================
-   TEAM INFO
-   ========================================================= */
-
-function opponentText(
-  event,
-  id
-){
-
-  const me =
-    findCompetitor(
-      event,
-      id
-    );
-
-  const opponent =
-    otherCompetitor(
-      event,
-      id
-    );
-
-  if(
-    !opponent
-  )
-    return '';
-
-  const prefix =
-    me?.homeAway === 'home'
-      ? 'vs.'
-      : 'at';
-
-  return (
-    `${prefix} ` +
-    `${
-      opponent.team
-        ?.shortDisplayName ||
-
-      opponent.team
-        ?.displayName ||
-
-      opponent.team
-        ?.name ||
-
-      'Opponent'
-    }`
-  );
-
-}
-
-
-function extractRecord(
-  recordJson,
-  teamJson
-){
-
-  const candidates =
-    [];
-
-  function walkItems(items){
-
-    if(
-      !Array.isArray(items)
-    )
-      return;
-
-    for(
-      const item
-      of items
-    ){
-
-      if(
-        item?.summary
-      ){
-
-        candidates.push({
-          summary:item.summary,
-          type:
-            item.type ||
-            item.name ||
-            ''
-        });
-
-      }
-
-      if(
-        item?.displayValue &&
-        /overall|total/i.test(
-          item?.name ||
-          item?.type ||
-          ''
-        )
-      ){
-
-        candidates.push({
-          summary:
-            item.displayValue,
-          type:
-            item.type ||
-            item.name ||
-            ''
-        });
-
-      }
-
-      if(
-        item?.stats
-      ){
-
-        const statMap =
-          {};
-
-        for(
-          const stat
-          of item.stats
-        ){
-
-          statMap[
-            (
-              stat.name ||
-              stat.abbreviation ||
-              ''
-            ).toLowerCase()
-          ] =
-            stat.value ??
-            stat.displayValue;
-
-        }
-
-        const wins =
-          statMap.wins ??
-          statMap.w;
-
-        const losses =
-          statMap.losses ??
-          statMap.l;
-
-        const ties =
-          statMap.ties ??
-          statMap.t;
-
-        if(
-          wins != null &&
-          losses != null
-        ){
-
-          candidates.push({
-            summary:
-              `${wins}-${losses}` +
-              `${
-                ties
-                  ? `-${ties}`
-                  : ''
-              }`,
-            type:
-              item.type ||
-              item.name ||
-              ''
-          });
-
-        }
-
-      }
-
-    }
-
-  }
-
-  walkItems(
-    recordJson?.items
-  );
-
-  walkItems(
-    recordJson
-      ?.record
-      ?.items
-  );
-
-  walkItems(
-    recordJson
-      ?.team
-      ?.record
-      ?.items
-  );
-
-  walkItems(
-    teamJson
-      ?.team
-      ?.record
-      ?.items
-  );
-
-  if(
-    teamJson
-      ?.team
-      ?.recordSummary
-  ){
-
-    candidates.push({
-      summary:
-        teamJson
-          .team
-          .recordSummary,
-      type:'overall'
-    });
-
-  }
-
-  const preferred =
-    candidates.find(
-      value =>
-        /overall|total/i.test(
-          value.type
-        )
-    ) ||
-    candidates[0];
-
-  return (
-    preferred?.summary ||
-    ''
-  );
-
-}
-
-
-function teamLogo(
-  teamJson,
-  team
-){
-
-  return (
-    teamJson
-      ?.team
-      ?.logos
-      ?.[0]
-      ?.href ||
-
-    teamJson
-      ?.team
-      ?.logo ||
-
-    team.fallbackLogo
-  );
-
-}
-
-
-/* =========================================================
-   LOAD FAVORITE TEAM FEEDS
-   ========================================================= */
-
-async function fetchTeamBundle(
-  team
-){
-
-  const base =
-    `${ESPN_BASE}/` +
-    `${team.sport}/` +
-    `${team.league}`;
+async function fetchTeamBundle(t){
+  const base=
+    `${ESPN_BASE}/${t.sport}/${t.league}`;
 
   const [
-    scheduleResult,
-    teamResult,
-    recordResult
-  ] =
-    await Promise.allSettled([
+    scheduleRes,
+    teamRes,
+    recordRes
+  ]=await Promise.allSettled([
+    fetchJson(`${base}/teams/${t.teamId}/schedule`),
+    fetchJson(`${base}/teams/${t.teamId}`),
+    fetchJson(`${base}/teams/${t.teamId}/record`)
+  ]);
 
-      fetchJson(
-        `${base}/teams/` +
-        `${team.teamId}/schedule`
-      ),
-
-      fetchJson(
-        `${base}/teams/` +
-        `${team.teamId}`
-      ),
-
-      fetchJson(
-        `${base}/teams/` +
-        `${team.teamId}/record`
-      )
-
-    ]);
-
-  if(
-    scheduleResult.status
-      !== 'fulfilled'
-  ){
-
-    throw (
-      scheduleResult.reason
-    );
-
+  if(scheduleRes.status!=='fulfilled'){
+    throw scheduleRes.reason;
   }
 
-  const schedule =
-    scheduleResult.value;
+  const schedule=scheduleRes.value;
 
-  const teamJson =
-    teamResult.status
-      === 'fulfilled'
-      ? teamResult.value
+  const teamJson=
+    teamRes.status==='fulfilled'
+      ? teamRes.value
       : {};
 
-  const recordJson =
-    recordResult.status
-      === 'fulfilled'
-      ? recordResult.value
+  const recordJson=
+    recordRes.status==='fulfilled'
+      ? recordRes.value
       : {};
 
-  const events =
-    schedule.events ||
-    [];
+  const events=schedule.events||[];
 
   /*
-    ESPN schedule feeds occasionally omit
-    a TV assignment that exists in the
-    event summary.
-
-    Only query summaries for events
-    we may actually put on screen.
+    ESPN schedule feeds sometimes omit a known TV assignment.
+    Only query the event summary for events we may actually show.
   */
-
-  const relevant =
-    events
-      .filter(
-        event =>
-          isSaneLive(event) ||
-
-          isRecentFinal(
-            event,
-            team.recentFinalHours ??
-            6
-          ) ||
-
-          isUpcomingWithin(
-            event,
-            7
-          )
-      )
-      .sort(
-        (a,b) =>
-          eventDate(a) -
-          eventDate(b)
-      )
-      .slice(
-        0,
-        3
-      );
+  const relevant=events
+    .filter(
+      e=>
+        isSaneLive(e) ||
+        isRecentFinal(e,t.recentFinalHours??6) ||
+        isEligibleUpcoming(e,t)
+    )
+    .sort((a,b)=>eventDate(a)-eventDate(b))
+    .slice(0,3);
 
   await Promise.all(
-    relevant.map(
-      async event => {
+    relevant.map(async e=>{
+      if(networkOf(e)==='TV TBD'){
+        const n=await fallbackNetworkForEvent(t,e);
 
-        if(
-          networkOf(event)
-            === 'TV TBD'
-        ){
-
-          const network =
-            await fallbackNetworkForEvent(
-              team,
-              event
-            );
-
-          if(
-            network &&
-            network !== 'TV TBD'
-          ){
-
-            event._resolvedNetwork =
-              network;
-
-          }
-
+        if(n && n!=='TV TBD'){
+          e._resolvedNetwork=n;
         }
-
       }
-    )
+    })
   );
 
   return {
-    team,
+    team:t,
     events,
     teamJson,
     recordJson,
-    record:
-      extractRecord(
-        recordJson,
-        teamJson
-      ),
-    logo:
-      teamLogo(
-        teamJson,
-        team
-      )
+    record:extractRecord(recordJson,teamJson),
+    logo:teamLogo(teamJson,t)
   };
-
 }
 
 
-/* =========================================================
-   SELECT FAVORITE EVENT
-   ========================================================= */
+/*
+  Absolute favorite-card hierarchy:
 
-function chooseDisplayEvent(
-  events,
-  team
-){
+  1. LIVE
+  2. Recent final
+  3. Next eligible game
 
-  const valid =
-    (events || [])
-      .filter(
-        event =>
-          eventDate(event)
-            .getTime() >
-          0
-      );
+  LIVE therefore overrides any final-score retention window.
+*/
+function chooseDisplayEvent(events,team){
+  const valid=(events||[])
+    .filter(e=>eventDate(e).getTime()>0);
 
-  const live =
-    valid
-      .filter(
-        isSaneLive
-      )
-      .sort(
-        (a,b) =>
-          eventDate(a) -
-          eventDate(b)
-      )[0];
+  const live=valid
+    .filter(isSaneLive)
+    .sort((a,b)=>eventDate(a)-eventDate(b))[0];
 
   if(live){
-
     return {
       event:live,
       kind:'live'
     };
-
   }
 
-  const recentFinal =
-    valid
-      .filter(
-        event =>
-          isRecentFinal(
-            event,
-            team
-              ?.recentFinalHours ??
-            6
-          )
+  const recentFinal=valid
+    .filter(
+      e=>isRecentFinal(
+        e,
+        team?.recentFinalHours ?? 6
       )
-      .sort(
-        (a,b) =>
-          eventDate(b) -
-          eventDate(a)
-      )[0];
+    )
+    .sort(
+      (a,b)=>eventDate(b)-eventDate(a)
+    )[0];
 
   if(recentFinal){
-
     return {
       event:recentFinal,
       kind:'final'
     };
-
   }
 
-  const next =
-    valid
-      .filter(
-        event =>
-          isUpcomingWithin(
-            event,
-            ACTIVE_WINDOW_DAYS
-          )
-      )
-      .sort(
-        (a,b) =>
-          eventDate(a) -
-          eventDate(b)
-      )[0];
+  const next=valid
+    .filter(
+      e=>isEligibleUpcoming(e,team)
+    )
+    .sort(
+      (a,b)=>eventDate(a)-eventDate(b)
+    )[0];
 
   if(next){
-
     return {
       event:next,
       kind:'upcoming'
     };
-
   }
 
   return null;
-
 }
 
 
-function buildCard(
-  bundle
-){
-
-  const chosen =
+function buildCard(bundle){
+  const chosen=
     chooseDisplayEvent(
       bundle.events,
       bundle.team
     );
 
-  if(
-    !chosen
-  )
-    return null;
+  if(!chosen) return null;
 
-  const team =
-    bundle.team;
+  const t=bundle.team;
+  const ev=chosen.event;
 
-  const event =
-    chosen.event;
+  const me=findCompetitor(ev,t.teamId);
+  const opp=otherCompetitor(ev,t.teamId);
 
-  const me =
-    findCompetitor(
-      event,
-      team.teamId
-    );
+  const isLive=chosen.kind==='live';
 
-  const opponent =
-    otherCompetitor(
-      event,
-      team.teamId
-    );
+  let headline='';
 
-  const isLive =
-    chosen.kind === 'live';
-
-  let headline =
-    '';
-
-  if(
-    isLive ||
-    chosen.kind === 'final'
-  ){
-
-    headline =
-      `${scoreValue(me)} – ` +
-      `${scoreValue(opponent)}`;
-
-  }
-  else{
-
-    headline =
-      fmtTime(
-        eventDate(event)
-      );
-
+  if(isLive || chosen.kind==='final'){
+    headline=
+      `${scoreValue(me)} – ${scoreValue(opp)}`;
+  }else{
+    headline=fmtTime(eventDate(ev));
   }
 
-  let detail =
-    '';
+  let detail='';
 
-  if(
-    isLive ||
-    chosen.kind === 'final'
-  ){
-
-    detail =
-      statusText(event);
-
-  }
-  else{
-
-    detail =
-      fmtShortDateTime(
-        eventDate(event)
-      );
-
+  if(isLive || chosen.kind==='final'){
+    detail=statusText(ev);
+  }else{
+    detail=fmtShortDateTime(eventDate(ev));
   }
 
   return {
-
-    t:team,
-    ev:event,
-
+    t,
+    ev,
     isLive,
     kind:chosen.kind,
-
-    record:
-      bundle.record,
-
-    logo:
-      bundle.logo,
-
+    record:bundle.record,
+    logo:bundle.logo,
     badge:
       isLive
         ? '<span class="liveDot"></span>LIVE'
         : (
-          chosen.kind === 'final'
-            ? 'FINAL'
-            : 'NEXT'
-        ),
-
-    match:
-      opponentText(
-        event,
-        team.teamId
-      ),
-
+            chosen.kind==='final'
+              ? 'FINAL'
+              : 'NEXT'
+          ),
+    match:opponentText(ev,t.teamId),
     headline,
-
     detail,
-
-    network:
-      networkOf(event)
-
+    network:networkOf(ev)
   };
-
 }
 
 
-/* =========================================================
-   FAVORITE PRIORITY
-   ========================================================= */
+function renderTeamCards(cards){
+  const grid=
+    document.getElementById('teamGrid');
 
-function isTodayInIndy(
-  date
-){
+  grid.innerHTML='';
 
-  const format =
-    value =>
-      new Intl.DateTimeFormat(
-        'en-CA',
-        {
-          timeZone:TZ,
-          year:'numeric',
-          month:'2-digit',
-          day:'2-digit'
-        }
-      ).format(value);
-
-  return (
-    format(date) ===
-    format(new Date())
-  );
-
-}
-
-
-function isPostseasonEvent(
-  event
-){
-
-  const text =
-    JSON.stringify({
-
-      seasonType:
-        event?.seasonType,
-
-      season:
-        event?.season,
-
-      notes:
-        competition(event)
-          ?.notes,
-
-      type:
-        competition(event)
-          ?.type
-
-    });
-
-  return (
-    /postseason|playoff|bowl|championship|tournament/i
-      .test(text) ||
-
-    Number(
-      event?.seasonType
-    ) === 3
-  );
-
-}
-
-
-function favoritePriority(
-  card
-){
-
-  let points =
-    0;
-
-  /*
-    Absolute priority:
-    live game.
-  */
-
-  if(
-    card.kind === 'live'
-  ){
-
-    points += 10000;
-
-  }
-
-  /*
-    Games occurring today.
-  */
-
-  if(
-    isTodayInIndy(
-      eventDate(
-        card.ev
-      )
-    )
-  ){
-
-    points += 5000;
-
-  }
-
-  /*
-    Recent completed game.
-  */
-
-  if(
-    card.kind === 'final'
-  ){
-
-    points += 3000;
-
-  }
-
-  /*
-    Postseason games.
-  */
-
-  if(
-    isPostseasonEvent(
-      card.ev
-    )
-  ){
-
-    points += 1800;
-
-  }
-
-  /*
-    Protect college football
-    on its game day.
-  */
-
-  if(
-    card.t.college &&
-    card.t.sport ===
-      'football' &&
-
-    isTodayInIndy(
-      eventDate(
-        card.ev
-      )
-    )
-  ){
-
-    points += 2200;
-
-  }
-
-  /*
-    Otherwise prefer
-    games nearest to now.
-  */
-
-  const hours =
-    Math.abs(
-      eventDate(
-        card.ev
-      ).getTime() -
-      Date.now()
-    ) /
-    3600000;
-
-  points +=
-    Math.max(
-      0,
-      500 -
-      hours
-    );
-
-  return points;
-
-}
-
-
-/* =========================================================
-   RENDER FAVORITES
-   ========================================================= */
-
-function renderTeamCards(
-  cards
-){
-
-  const grid =
-    document.getElementById(
-      'teamGrid'
-    );
-
-  grid.innerHTML =
-    '';
-
-  if(
-    !cards.length
-  ){
-
-    grid.className =
-      'emptyTeams';
-
-    grid.textContent =
-      'No favorite-team games within the next 14 days.';
-
+  if(!cards.length){
+    grid.className='emptyTeams';
+    grid.textContent=
+      'No favorite-team games currently active.';
     return;
-
   }
 
-  grid.className =
-    'teamGrid';
+  grid.className='teamGrid';
 
-  grid.style
-    .setProperty(
-      '--team-count',
-      Math.min(
-        cards.length,
-        6
-      )
+  grid.style.setProperty(
+    '--team-count',
+    Math.min(cards.length,6)
+  );
+
+  for(const c of cards.slice(0,6)){
+    const div=document.createElement('div');
+
+    div.className=
+      `teamCard` +
+      `${c.t.women?' women':''}` +
+      `${c.isLive?' live':''}`;
+
+    div.style.setProperty(
+      '--team-rgb',
+      c.t.rgb
     );
 
-  for(
-    const card
-    of cards.slice(0,6)
-  ){
-
-    const div =
-      document.createElement(
-        'div'
-      );
-
-    div.className =
-      `teamCard` +
-      `${card.t.women ? ' women' : ''}` +
-      `${card.isLive ? ' live' : ''}`;
-
-    div.style
-      .setProperty(
-        '--team-rgb',
-        card.t.rgb
-      );
-
-    div.innerHTML = `
-
+    div.innerHTML=`
       <div class="teamHeader">
 
         <div class="teamLogoWrap">
-
           <img
             class="teamLogo"
-            src="${card.logo}"
-            alt="${card.t.name}"
+            src="${c.logo}"
+            alt="${c.t.name}"
             onerror="
               this.style.display='none';
-              this.nextElementSibling.style.display='flex';
+              this.nextElementSibling.style.display='flex'
             "
           >
-
-          <div class="logoFallback">
-            ${card.t.short}
-          </div>
-
+          <div class="logoFallback">${c.t.short}</div>
         </div>
 
         <div class="teamIdentity">
-
-          <div class="teamName">
-            ${card.t.name}
-          </div>
-
+          <div class="teamName">${c.t.name}</div>
           <div class="league">
-            ${card.t.sportLabel}
-
-            <span class="sportMark">
-              ${card.t.sportMark || ''}
-            </span>
-
-            ${
-              card.record
-                ? ` · ${card.record}`
-                : ''
-            }
+            ${c.t.sportLabel}
+            <span class="sportMark">${c.t.sportMark||''}</span>
+            ${c.record ? ` · ${c.record}` : ''}
           </div>
-
         </div>
 
-        <div
-          class="badge${card.isLive ? ' live' : ''}"
-        >
-          ${card.badge}
+        <div class="badge${c.isLive?' live':''}">
+          ${c.badge}
         </div>
 
       </div>
 
-      <div class="match">
-        ${card.match}
-      </div>
+      <div class="match">${c.match}</div>
 
-      <div class="bigScore">
-        ${card.headline}
-      </div>
+      <div class="bigScore">${c.headline}</div>
 
       <div class="meta">
-
-        <div class="detail">
-          ${card.detail}
-        </div>
-
-        <div class="network">
-          ${card.network}
-        </div>
-
+        <div class="detail">${c.detail}</div>
+        <div class="network">${c.network}</div>
       </div>
-
     `;
 
-    grid.appendChild(
-      div
-    );
-
+    grid.appendChild(div);
   }
-
 }
 
 
-/* =========================================================
-   FAVORITE TEAMS — COMING UP
-   ========================================================= */
+/*
+  ON DECK has two jobs:
 
-function renderComing(
-  bundles
+  1. Show favorites that qualified but did not make the six-card
+     Your Teams display.
+  2. If there is room, show useful upcoming favorite games that
+     are not already represented in Your Teams.
+
+  It intentionally avoids duplicating the main favorite cards.
+*/
+function renderOnDeck(
+  bundles,
+  allCards,
+  displayedCards
 ){
+  const list=
+    document.getElementById('comingList');
 
-  const now =
-    Date.now();
+  const note=
+    document.getElementById('onDeckNote');
 
-  const week =
-    now +
-    7 *
-    86400000;
+  list.innerHTML='';
 
-  const upcoming =
-    [];
+  const displayedKeys=
+    new Set(
+      displayedCards.map(c=>c.t.key)
+    );
 
-  for(
-    const bundle
-    of bundles
-  ){
+  const displayedEvents=
+    new Set(
+      displayedCards.map(
+        c=>String(c.ev?.id||'')
+      )
+    );
 
-    for(
-      const event
-      of bundle.events
-    ){
+  const items=[];
+  const seen=new Set();
 
-      const when =
-        eventDate(event)
-          .getTime();
+
+  /*
+    First: overflow from the six-card traffic jam.
+  */
+  for(const c of allCards.slice(6)){
+    const id=
+      `${c.t.key}:` +
+      `${c.ev?.id||eventDate(c.ev).getTime()}`;
+
+    if(seen.has(id)) continue;
+
+    seen.add(id);
+
+    items.push({
+      type:'overflow',
+      t:c.t,
+      e:c.ev,
+      kind:c.kind,
+      isLive:c.isLive
+    });
+  }
+
+
+  /*
+    Second: useful upcoming favorites not already represented
+    by a team on the main board.
+  */
+  const now=Date.now();
+  const week=now+7*86400000;
+  const upcoming=[];
+
+  for(const b of bundles){
+    for(const e of b.events){
+      const when=eventDate(e).getTime();
 
       if(
-        !isCompleted(event) &&
-        !isSaneLive(event) &&
-        when >=
-          now -
-          3600000 &&
-        when <= week
+        isCompleted(e) ||
+        isSaneLive(e) ||
+        when<now-3600000 ||
+        when>week
       ){
-
-        upcoming.push({
-          t:bundle.team,
-          e:event
-        });
-
+        continue;
       }
 
-    }
+      if(
+        displayedKeys.has(b.team.key) ||
+        displayedEvents.has(String(e.id||''))
+      ){
+        continue;
+      }
 
+      const id=
+        `${b.team.key}:${e.id||when}`;
+
+      if(seen.has(id)) continue;
+
+      upcoming.push({
+        type:'upcoming',
+        t:b.team,
+        e,
+        kind:'upcoming',
+        isLive:false
+      });
+
+      seen.add(id);
+    }
   }
 
   upcoming.sort(
-    (a,b) =>
-      eventDate(a.e) -
-      eventDate(b.e)
+    (a,b)=>eventDate(a.e)-eventDate(b.e)
   );
 
-  const list =
-    document.getElementById(
-      'comingList'
-    );
+  items.push(...upcoming);
 
-  list.innerHTML =
-    '';
 
-  if(
-    !upcoming.length
-  ){
+  if(!items.length){
+    note.textContent='No duplication';
 
-    list.innerHTML =
+    list.innerHTML=
       '<div class="phaseMsg">' +
-      'No favorite-team games scheduled in the next seven days.' +
+      'Your main board already has the useful favorite-team information covered.' +
       '</div>';
 
     return;
-
   }
 
-  for(
-    const item
-    of upcoming.slice(0,7)
-  ){
 
-    const date =
-      eventDate(
-        item.e
-      );
+  note.textContent=
+    allCards.length>6
+      ? 'Overflow · Coming up'
+      : 'Coming up · No duplication';
 
-    const div =
-      document.createElement(
-        'div'
-      );
 
-    div.className =
-      'comingItem';
+  for(const x of items.slice(0,7)){
+    const d=eventDate(x.e);
+    const div=document.createElement('div');
 
-    const day =
-      new Intl.DateTimeFormat(
-        'en-US',
-        {
-          timeZone:TZ,
-          weekday:'short'
-        }
-      )
-      .format(date)
-      .toUpperCase();
+    div.className='comingItem';
 
-    div.innerHTML = `
+    let left='';
 
-      <div class="comingTime">
-        ${day}
-      </div>
+    if(x.kind==='live'){
+      left='LIVE';
+    }else if(x.kind==='final'){
+      left='FINAL';
+    }else{
+      left=
+        new Intl.DateTimeFormat(
+          'en-US',
+          {
+            timeZone:TZ,
+            weekday:'short'
+          }
+        )
+        .format(d)
+        .toUpperCase();
+    }
+
+    const sub=
+      x.kind==='live'
+        ? statusText(x.e)
+        : (
+            x.kind==='final'
+              ? `${statusText(x.e)} · ${fmtShortDateTime(d)}`
+              : fmtShortDateTime(d)
+          );
+
+    div.innerHTML=`
+      <div class="comingTime">${left}</div>
 
       <div>
-
         <div class="comingTeams">
-          ${item.t.name}
-          ${opponentText(
-            item.e,
-            item.t.teamId
-          )}
+          ${x.t.name} ${opponentText(x.e,x.t.teamId)}
         </div>
-
-        <div class="tiny">
-          ${fmtShortDateTime(date)}
-        </div>
-
+        <div class="tiny">${sub}</div>
       </div>
 
       <div class="comingNetwork">
-        ${networkOf(item.e)}
+        ${networkOf(x.e)}
       </div>
-
     `;
 
-    list.appendChild(
-      div
-    );
-
+    list.appendChild(div);
   }
-
 }
 
 
-/* =========================================================
-   AROUND SPORTS
-   ========================================================= */
-
-function aroundStatusRank(
-  game
-){
-
-  if(
-    game.state === 'live'
-  )
-    return 0;
-
-  if(
-    game.state === 'pre'
-  )
-    return 1;
-
+function aroundStatusRank(g){
+  if(g.state==='live') return 0;
+  if(g.state==='pre') return 1;
   return 2;
-
 }
 
 
@@ -3101,152 +1658,92 @@ function normalizeEspnAround(
   event,
   leagueLabel
 ){
+  const c=
+    event?.competitions?.[0]||{};
 
-  const comp =
-    event
-      ?.competitions
-      ?.[0] ||
+  const comps=
+    c.competitors||[];
+
+  const home=
+    comps.find(x=>x.homeAway==='home') ||
+    comps[0] ||
     {};
 
-  const competitors =
-    comp.competitors ||
-    [];
-
-  const home =
-    competitors.find(
-      item =>
-        item.homeAway ===
-        'home'
-    ) ||
-    competitors[0] ||
+  const away=
+    comps.find(x=>x.homeAway==='away') ||
+    comps[1] ||
     {};
 
-  const away =
-    competitors.find(
-      item =>
-        item.homeAway ===
-        'away'
-    ) ||
-    competitors[1] ||
-    {};
-
-  const status =
-    comp.status?.type ||
+  const st=
+    c.status?.type ||
     event?.status?.type ||
     {};
 
-  const state =
-    status.state === 'in'
+  const state=
+    st.state==='in'
       ? 'live'
       : (
-        status.completed ||
-        status.state === 'post'
-          ? 'post'
-          : 'pre'
-      );
+          st.completed || st.state==='post'
+            ? 'post'
+            : 'pre'
+        );
 
   /*
-    Rankings only make sense
-    for NCAA entries here.
-
-    This prevents ESPN internal
-    grouping values such as #99
-    appearing beside NFL teams.
+    Only actual NCAA rankings from 1–25 are allowed.
+    This prevents ESPN's internal pro-team grouping numbers
+    from appearing as fake rankings.
   */
-
-  const rank =
-    competitor => {
-
-      const value =
-        Number(
-          competitor
-            ?.curatedRank
-            ?.current ||
-
-          competitor
-            ?.team
-            ?.rank ||
-
-          0
-        ) || 0;
-
-      return (
-        /^NCAA/.test(
-          leagueLabel
-        ) &&
-        value >= 1 &&
-        value <= 25
-      )
-        ? value
-        : 0;
-
-    };
-
-  const score =
-    competitor =>
+  const rank=x=>{
+    const r=
       Number(
-        scoreValue(
-          competitor
-        ) ||
+        x?.curatedRank?.current ||
+        x?.team?.rank ||
         0
-      );
+      ) || 0;
+
+    return (
+      /^NCAA/.test(leagueLabel) &&
+      r>=1 &&
+      r<=25
+    )
+      ? r
+      : 0;
+  };
+
+  const score=x=>
+    Number(scoreValue(x)||0);
 
   return {
-
     source:'ESPN',
-
-    league:
-      leagueLabel,
-
+    league:leagueLabel,
     state,
-
-    date:
-      new Date(
-        event.date ||
-        comp.date ||
-        0
-      ),
+    date:new Date(event.date||c.date||0),
 
     away:
-      away.team
-        ?.shortDisplayName ||
-      away.team
-        ?.displayName ||
-      away.team
-        ?.name ||
+      away.team?.shortDisplayName ||
+      away.team?.displayName ||
+      away.team?.name ||
       'Away',
 
     home:
-      home.team
-        ?.shortDisplayName ||
-      home.team
-        ?.displayName ||
-      home.team
-        ?.name ||
+      home.team?.shortDisplayName ||
+      home.team?.displayName ||
+      home.team?.name ||
       'Home',
 
-    awayScore:
-      score(away),
+    awayScore:score(away),
+    homeScore:score(home),
 
-    homeScore:
-      score(home),
-
-    awayRank:
-      rank(away),
-
-    homeRank:
-      rank(home),
+    awayRank:rank(away),
+    homeRank:rank(home),
 
     status:
-      status.shortDetail ||
-      status.detail ||
+      st.shortDetail ||
+      st.detail ||
       '',
 
-    network:
-      networkOf(event)
-
+    network:networkOf(event)
   };
-
 }
 
 
@@ -3254,312 +1751,218 @@ function normalizeNcaaAround(
   wrapper,
   leagueLabel
 ){
-
-  const game =
+  const g=
     wrapper?.game ||
     wrapper ||
     {};
 
-  const toRank =
-    value =>
-      Number(value) ||
-      0;
+  const toRank=v=>
+    Number(v)||0;
 
-  const toScore =
-    value =>
-      Number(value) ||
-      0;
+  const toScore=v=>
+    Number(v)||0;
 
-  let date =
-    null;
+  let dt=null;
 
-  if(
-    game.startTimeEpoch
-  ){
-
-    date =
+  if(g.startTimeEpoch){
+    dt=
       new Date(
-        Number(
-          game.startTimeEpoch
-        ) *
-        1000
+        Number(g.startTimeEpoch)*1000
       );
-
   }
 
-  if(
-    !date ||
-    !date.getTime()
-  ){
+  if(!dt || !dt.getTime()){
+    const raw=
+      `${g.startDate||''} ${g.startTime||''}`
+        .replace(/ ET$/,'');
 
-    const raw =
-      `${game.startDate || ''} ` +
-      `${game.startTime || ''}`;
+    const trial=
+      new Date(raw);
 
-    const cleaned =
-      raw.replace(
-        / ET$/,
-        ''
-      );
-
-    const trial =
-      new Date(
-        cleaned
-      );
-
-    if(
-      trial.getTime()
-    ){
-
-      date =
-        trial;
-
+    if(trial.getTime()){
+      dt=trial;
     }
-
   }
 
   return {
-
     source:'NCAA',
-
-    league:
-      leagueLabel,
+    league:leagueLabel,
 
     state:
-      game.gameState === 'live'
+      g.gameState==='live'
         ? 'live'
         : (
-          game.gameState === 'final'
-            ? 'post'
-            : 'pre'
-        ),
+            g.gameState==='final'
+              ? 'post'
+              : 'pre'
+          ),
 
-    date:
-      date ||
-      new Date(0),
+    date:dt||new Date(0),
 
     away:
-      game.away
-        ?.names
-        ?.short ||
-
-      game.away
-        ?.names
-        ?.full ||
-
+      g.away?.names?.short ||
+      g.away?.names?.full ||
       'Away',
 
     home:
-      game.home
-        ?.names
-        ?.short ||
-
-      game.home
-        ?.names
-        ?.full ||
-
+      g.home?.names?.short ||
+      g.home?.names?.full ||
       'Home',
 
-    awayScore:
-      toScore(
-        game.away?.score
-      ),
+    awayScore:toScore(g.away?.score),
+    homeScore:toScore(g.home?.score),
 
-    homeScore:
-      toScore(
-        game.home?.score
-      ),
-
-    awayRank:
-      toRank(
-        game.away?.rank
-      ),
-
-    homeRank:
-      toRank(
-        game.home?.rank
-      ),
+    awayRank:toRank(g.away?.rank),
+    homeRank:toRank(g.home?.rank),
 
     status:
-      game.gameState === 'live'
-        ? (
-          `${game.currentPeriod || ''}` +
-          `${
-            game.contestClock
-              ? ` · ${game.contestClock}`
+      g.gameState==='live'
+        ? `${g.currentPeriod||''}${
+            g.contestClock
+              ? ` · ${g.contestClock}`
               : ''
-          }`
-        ).trim()
+          }`.trim()
         : (
-          game.finalMessage ||
-          game.startTime ||
-          ''
-        ),
+            g.finalMessage ||
+            g.startTime ||
+            ''
+          ),
 
     network:
-      game.network ||
+      g.network ||
       'TV TBD'
-
   };
-
 }
 
 
-function aroundImportance(
-  game
-){
+function aroundImportance(g){
+  let pts=0;
 
-  let points =
-    0;
+  const now=Date.now();
 
-  const now =
-    Date.now();
-
-  const hours =
+  const hours=
     Math.abs(
-      game.date.getTime() -
-      now
-    ) /
-    3600000;
+      g.date.getTime()-now
+    )/3600000;
 
-  if(
-    game.state === 'live'
-  ){
-
-    points += 100;
-
-  }
-  else if(
-    game.state === 'pre'
-  ){
-
-    points +=
-      Math.max(
-        0,
-        45 -
-        hours * 2
-      );
-
-  }
-  else{
-
-    points += 8;
-
-  }
-
-  const ranked =
-    (
-      game.awayRank > 0
-        ? 1
-        : 0
-    ) +
-    (
-      game.homeRank > 0
-        ? 1
-        : 0
+  if(g.state==='live'){
+    pts+=100;
+  }else if(g.state==='pre'){
+    pts+=Math.max(
+      0,
+      45-hours*2
     );
+  }else{
+    pts+=8;
+  }
 
-  points +=
-    ranked *
-    18;
+  const ranked=
+    (g.awayRank>0?1:0) +
+    (g.homeRank>0?1:0);
+
+  pts+=ranked*18;
 
   if(
-    game.awayRank > 0 &&
-    game.awayRank <= 10
+    g.awayRank>0 &&
+    g.awayRank<=10
   ){
-
-    points += 9;
-
+    pts+=9;
   }
 
   if(
-    game.homeRank > 0 &&
-    game.homeRank <= 10
+    g.homeRank>0 &&
+    g.homeRank<=10
   ){
-
-    points += 9;
-
+    pts+=9;
   }
 
-  if(
-    game.state === 'live'
-  ){
-
-    const margin =
+  if(g.state==='live'){
+    const margin=
       Math.abs(
-        game.awayScore -
-        game.homeScore
+        g.awayScore-g.homeScore
       );
 
-    if(
-      margin <= 3
-    ){
-
-      points += 25;
-
-    }
-    else if(
-      margin <= 7
-    ){
-
-      points += 16;
-
-    }
-    else if(
-      margin <= 14
-    ){
-
-      points += 7;
-
+    if(margin<=3){
+      pts+=25;
+    }else if(margin<=7){
+      pts+=16;
+    }else if(margin<=14){
+      pts+=7;
     }
 
     if(
       (
-        game.awayRank &&
-        game.homeScore >
-          game.awayScore
+        g.awayRank &&
+        g.homeScore>g.awayScore
       ) ||
       (
-        game.homeRank &&
-        game.awayScore >
-          game.homeScore
+        g.homeRank &&
+        g.awayScore>g.homeScore
       )
     ){
-
-      points += 14;
-
+      pts+=14;
     }
-
   }
 
   if(
     /playoff|championship|wild card|tournament/i
-      .test(
-        game.status ||
-        ''
-      )
+      .test(g.status||'')
   ){
-
-    points += 20;
-
+    pts+=20;
   }
 
-  return points;
-
+  return pts;
 }
 
 
-function rankLabel(
-  rank,
-  name
-){
+function rankLabel(rank,name){
+  return rank
+    ? `#${rank} ${name}`
+    : name;
+}
 
-  return (
-    rank
-      ? `#${rank} ${name}`
-      : name
-  );
 
+/*
+  Around Sports uses one small league logo rather than
+  individual team logos. If a logo URL fails, the league
+  abbreviation automatically appears instead.
+*/
+function leagueLogoInfo(league){
+  const key=
+    String(league||'').toUpperCase();
+
+  if(key==='MLB'){
+    return {
+      src:'https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png',
+      label:'MLB'
+    };
+  }
+
+  if(key==='NFL'){
+    return {
+      src:'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png',
+      label:'NFL'
+    };
+  }
+
+  if(key==='NBA'){
+    return {
+      src:'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',
+      label:'NBA'
+    };
+  }
+
+  if(key==='WNBA'){
+    return {
+      src:'https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png',
+      label:'WNBA'
+    };
+  }
+
+  return {
+    src:'https://a.espncdn.com/i/teamlogos/leagues/500/ncaa.png',
+    label:'NCAA'
+  };
 }
 
 
@@ -3567,132 +1970,99 @@ function renderAroundGames(
   games,
   title
 ){
-
   document
-    .getElementById(
-      'aroundTitle'
-    )
-    .textContent =
-      title;
+    .getElementById('aroundTitle')
+    .textContent=title;
 
-  const list =
-    document.getElementById(
-      'gameList'
-    );
+  const list=
+    document.getElementById('gameList');
 
-  list.innerHTML =
-    '';
+  list.innerHTML='';
 
-  if(
-    !games.length
-  ){
-
-    list.innerHTML =
+  if(!games.length){
+    list.innerHTML=
       '<div class="phaseMsg">' +
       'Nothing compelling on the board right now.' +
       '</div>';
 
     return;
-
   }
 
-  for(
-    const game
-    of games.slice(0,6)
-  ){
+  for(const g of games.slice(0,6)){
+    const d=
+      document.createElement('div');
 
-    const div =
-      document.createElement(
-        'div'
-      );
+    d.className=
+      `gameCard${
+        g.state==='live'
+          ? ' live'
+          : ''
+      }`;
 
-    div.className =
-      'gameCard';
+    const teams=
+      `${rankLabel(g.awayRank,g.away)} at ` +
+      `${rankLabel(g.homeRank,g.home)}`;
 
-    const teams =
-      `${rankLabel(
-        game.awayRank,
-        game.away
-      )} at ` +
-      `${rankLabel(
-        game.homeRank,
-        game.home
-      )}`;
-
-    let main =
-      '';
+    let main='';
 
     if(
-      game.state === 'live' ||
-      game.state === 'post'
+      g.state==='live' ||
+      g.state==='post'
     ){
-
-      main =
-        `${game.awayScore} – ` +
-        `${game.homeScore}`;
-
-    }
-    else{
-
-      main =
-        fmtTime(
-          game.date
-        );
-
+      main=
+        `${g.awayScore} – ${g.homeScore}`;
+    }else{
+      main=
+        fmtTime(g.date);
     }
 
-    const context =
-      game.state === 'live'
+    const context=
+      g.state==='live'
         ? (
-          `LIVE · ` +
-          `${game.status || game.league}`
-        )
+            `<span class="aroundLive">` +
+            `<span class="liveDot"></span>LIVE` +
+            `</span> · ${g.status||g.league}`
+          )
         : (
-          game.state === 'post'
-            ? (
-              `FINAL · ` +
-              `${game.league}`
-            )
-            : (
-              `${game.league} · ` +
-              `${fmtShortDateTime(game.date)}`
-            )
-        );
+            g.state==='post'
+              ? `FINAL · ${g.league}`
+              : `${g.league} · ${fmtShortDateTime(g.date)}`
+          );
 
-    div.innerHTML = `
+    const leagueLogo=
+      leagueLogoInfo(g.league);
+
+    d.innerHTML=`
+      <div class="leagueLogoWrap">
+        <img
+          class="leagueLogo"
+          src="${leagueLogo.src}"
+          alt="${leagueLogo.label}"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='block'
+          "
+        >
+        <div class="leagueLogoFallback">
+          ${leagueLogo.label}
+        </div>
+      </div>
 
       <div>
-
-        <div class="gameTeams">
-          ${teams}
-        </div>
-
-        <div class="gameContext">
-          ${context}
-        </div>
-
+        <div class="gameTeams">${teams}</div>
+        <div class="gameContext">${context}</div>
       </div>
 
       <div class="gameRight">
-
-        <div class="gameScore">
-          ${main}
-        </div>
-
+        <div class="gameScore">${main}</div>
         <div class="gameNetwork">
-          ${game.network || 'TV TBD'}
+          ${g.network||'TV TBD'}
         </div>
-
       </div>
-
     `;
 
-    list.appendChild(
-      div
-    );
-
+    list.appendChild(d);
   }
-
 }
 
 
@@ -3702,33 +2072,17 @@ async function fetchEspnAround(
   label,
   dates
 ){
+  const url=
+    `${ESPN_BASE}/${sport}/${league}/scoreboard` +
+    `${dates ? `?dates=${dates}` : ''}`;
 
-  const url =
-    `${ESPN_BASE}/` +
-    `${sport}/` +
-    `${league}/scoreboard` +
-    `${
-      dates
-        ? `?dates=${dates}`
-        : ''
-    }`;
+  const data=
+    await fetchJson(url);
 
-  const data =
-    await fetchJson(
-      url
+  return (data.events||[])
+    .map(
+      e=>normalizeEspnAround(e,label)
     );
-
-  return (
-    data.events ||
-    []
-  ).map(
-    event =>
-      normalizeEspnAround(
-        event,
-        label
-      )
-  );
-
 }
 
 
@@ -3737,42 +2091,25 @@ async function fetchNcaaToday(
   division,
   label
 ){
-
   try{
-
-    const data =
+    const data=
       await fetchJson(
-        `${NCAA_BASE}/scoreboard/` +
-        `${sport}/` +
-        `${division}`
+        `${NCAA_BASE}/scoreboard/${sport}/${division}`
       );
 
-    return (
-      data.games ||
-      []
-    ).map(
-      game =>
-        normalizeNcaaAround(
-          game,
-          label
-        )
-    );
+    return (data.games||[])
+      .map(
+        g=>normalizeNcaaAround(g,label)
+      );
 
-  }
-  catch(error){
-
+  }catch(e){
     return [];
-
   }
-
 }
 
 
-function espnDateString(
-  date=new Date()
-){
-
-  const parts =
+function espnDateString(d=new Date()){
+  const parts=
     new Intl.DateTimeFormat(
       'en-US',
       {
@@ -3781,96 +2118,69 @@ function espnDateString(
         month:'2-digit',
         day:'2-digit'
       }
-    ).formatToParts(
-      date
-    );
+    ).formatToParts(d);
 
-  const values =
+  const obj=
     Object.fromEntries(
       parts.map(
-        part =>
-          [
-            part.type,
-            part.value
-          ]
+        x=>[x.type,x.value]
       )
     );
 
-  return (
-    `${values.year}` +
-    `${values.month}` +
-    `${values.day}`
-  );
-
+  return `${obj.year}${obj.month}${obj.day}`;
 }
 
 
 async function loadAroundSports(){
-
-  const weekday =
+  const dayName=
     new Intl.DateTimeFormat(
       'en-US',
       {
         timeZone:TZ,
         weekday:'short'
       }
-    ).format(
-      new Date()
-    );
+    ).format(new Date());
 
-  let dow =
-    new Date()
-      .getDay();
+  const dow=
+    dayName==='Sat'
+      ? 6
+      : (
+          dayName==='Sun'
+            ? 0
+            : new Date().getDay()
+        );
 
-  if(
-    weekday === 'Sat'
-  )
-    dow = 6;
-
-  if(
-    weekday === 'Sun'
-  )
-    dow = 0;
-
-  const dates =
+  const dates=
     espnDateString();
 
-  const jobs = [
-
+  const jobs=[
     fetchEspnAround(
       'baseball',
       'mlb',
       'MLB',
       dates
     ),
-
     fetchEspnAround(
       'football',
       'nfl',
       'NFL',
       dates
     ),
-
     fetchEspnAround(
       'basketball',
       'nba',
       'NBA',
       dates
     ),
-
     fetchEspnAround(
       'basketball',
       'wnba',
       'WNBA',
       dates
     )
-
   ];
 
-  if(
-    dow === 6
-  ){
-
+  if(dow===6){
     jobs.push(
       fetchNcaaToday(
         'football',
@@ -3878,10 +2188,7 @@ async function loadAroundSports(){
         'NCAA Football'
       )
     );
-
-  }
-  else{
-
+  }else{
     jobs.push(
       fetchNcaaToday(
         'basketball-men',
@@ -3897,230 +2204,274 @@ async function loadAroundSports(){
         'NCAA Women'
       )
     );
-
   }
 
-  const settled =
-    await Promise.allSettled(
-      jobs
-    );
+  const settled=
+    await Promise.allSettled(jobs);
 
-  let games =
-    [];
+  let games=[];
 
-  for(
-    const result
-    of settled
-  ){
-
-    if(
-      result.status ===
-      'fulfilled'
-    ){
-
-      games.push(
-        ...result.value
-      );
-
+  for(const x of settled){
+    if(x.status==='fulfilled'){
+      games.push(...x.value);
     }
-
   }
 
-  const now =
-    Date.now();
+  const now=Date.now();
 
-  games =
-    games.filter(
-      game => {
-
-        if(
-          game.state === 'live'
-        )
-          return true;
-
-        const diff =
-          (
-            game.date
-              .getTime() -
-            now
-          ) /
-          3600000;
-
-        if(
-          game.state === 'pre'
-        ){
-
-          return (
-            diff >= -1 &&
-            diff <= 18
-          );
-
-        }
-
-        return (
-          diff >= -8 &&
-          diff <= 2
-        );
-
+  games=
+    games.filter(g=>{
+      /*
+        LIVE is never filtered out.
+      */
+      if(g.state==='live'){
+        return true;
       }
-    );
 
-  games.sort(
-    (a,b) => {
+      const diff=
+        (
+          g.date.getTime()-now
+        )/3600000;
 
-      const importance =
-        aroundImportance(b) -
-        aroundImportance(a);
+      if(g.state==='pre'){
+        return diff>=-1 && diff<=18;
+      }
 
-      if(
-        importance
-      )
-        return importance;
+      return diff>=-8 && diff<=2;
+    });
 
-      const status =
-        aroundStatusRank(a) -
-        aroundStatusRank(b);
 
-      if(
-        status
-      )
-        return status;
+  /*
+    LIVE is an absolute Around Sports priority.
 
-      return (
-        a.date -
-        b.date
-      );
+    Only after separating live from non-live games does the
+    relevance algorithm determine order.
+  */
+  games.sort((a,b)=>{
+    const liveA=
+      a.state==='live'
+        ? 1
+        : 0;
 
+    const liveB=
+      b.state==='live'
+        ? 1
+        : 0;
+
+    if(liveA!==liveB){
+      return liveB-liveA;
     }
-  );
 
-  let title =
-    'Around Sports';
+    const imp=
+      aroundImportance(b) -
+      aroundImportance(a);
 
-  if(
-    dow === 6
-  )
-    title =
-      'College Football Saturday';
+    if(imp){
+      return imp;
+    }
 
-  else if(
-    dow === 0
-  )
-    title =
-      'NFL Sunday';
+    const state=
+      aroundStatusRank(a) -
+      aroundStatusRank(b);
+
+    if(state){
+      return state;
+    }
+
+    return a.date-b.date;
+  });
+
+
+  let title='Around Sports';
+
+  if(dow===6){
+    title='College Football Saturday';
+  }else if(dow===0){
+    title='NFL Sunday';
+  }
 
   renderAroundGames(
     games,
     title
   );
-
 }
 
 
-/* =========================================================
-   LOAD / PRIORITIZE FAVORITES
-   ========================================================= */
+function isTodayInIndy(d){
+  const f=x=>
+    new Intl.DateTimeFormat(
+      'en-CA',
+      {
+        timeZone:TZ,
+        year:'numeric',
+        month:'2-digit',
+        day:'2-digit'
+      }
+    ).format(x);
+
+  return f(d)===f(new Date());
+}
+
+
+function isPostseasonEvent(ev){
+  const text=
+    JSON.stringify({
+      seasonType:ev?.seasonType,
+      season:ev?.season,
+      notes:competition(ev)?.notes,
+      type:competition(ev)?.type
+    });
+
+  return (
+    /postseason|playoff|bowl|championship|tournament/i
+      .test(text) ||
+    Number(ev?.seasonType)===3
+  );
+}
+
+
+function favoritePriority(c){
+  let pts=0;
+
+  /*
+    LIVE also receives the largest numerical bonus, but
+    loadSports separately guarantees LIVE sorts first.
+  */
+  if(c.kind==='live'){
+    pts+=10000;
+  }
+
+  if(
+    isTodayInIndy(
+      eventDate(c.ev)
+    )
+  ){
+    pts+=5000;
+  }
+
+  if(c.kind==='final'){
+    pts+=3000;
+  }
+
+  if(isPostseasonEvent(c.ev)){
+    pts+=1800;
+  }
+
+  /*
+    Protect college football on game day.
+  */
+  if(
+    c.t.college &&
+    c.t.sport==='football' &&
+    isTodayInIndy(
+      eventDate(c.ev)
+    )
+  ){
+    pts+=2200;
+  }
+
+  /*
+    Then prefer the game closest to now.
+  */
+  const hours=
+    Math.abs(
+      eventDate(c.ev).getTime() -
+      Date.now()
+    )/3600000;
+
+  pts+=
+    Math.max(
+      0,
+      500-hours
+    );
+
+  return pts;
+}
+
 
 async function loadSports(){
+  const status=
+    document.getElementById('teamStatus');
 
-  const status =
-    document.getElementById(
-      'teamStatus'
-    );
-
-  status.textContent =
+  status.textContent=
     'Updating favorite teams…';
 
-  const settled =
+  const settled=
     await Promise.allSettled(
-      favoriteTeams.map(
-        fetchTeamBundle
-      )
+      favoriteTeams.map(fetchTeamBundle)
     );
 
-  const good =
+  const good=
     settled
       .filter(
-        result =>
-          result.status ===
-          'fulfilled'
+        x=>x.status==='fulfilled'
       )
       .map(
-        result =>
-          result.value
+        x=>x.value
       );
 
-  const cards =
+  const cards=
     good
-      .map(
-        buildCard
-      )
+      .map(buildCard)
       .filter(Boolean);
 
-  cards.sort(
-    (a,b) => {
 
-      const priority =
-        favoritePriority(b) -
-        favoritePriority(a);
+  /*
+    LIVE is absolute.
 
-      if(
-        priority
-      )
-        return priority;
-
-      return (
-        eventDate(a.ev) -
-        eventDate(b.ev)
-      );
-
+    No recent-final window, postseason bonus, game-day bonus,
+    or proximity score can put a non-live favorite above a
+    live favorite.
+  */
+  cards.sort((a,b)=>{
+    if(a.isLive!==b.isLive){
+      return a.isLive
+        ? -1
+        : 1;
     }
+
+    const p=
+      favoritePriority(b) -
+      favoritePriority(a);
+
+    if(p){
+      return p;
+    }
+
+    return (
+      eventDate(a.ev) -
+      eventDate(b.ev)
+    );
+  });
+
+
+  const displayed=
+    cards.slice(0,6);
+
+  renderTeamCards(cards);
+
+  renderOnDeck(
+    good,
+    cards,
+    displayed
   );
 
-  renderTeamCards(
-    cards
-  );
 
-  renderComing(
-    good
-  );
+  const failed=
+    settled.length-good.length;
 
-  const failed =
-    settled.length -
-    good.length;
-
-  status.textContent =
-
-    `${cards.length} active favorite` +
-
-    `${cards.length === 1 ? '' : 's'}` +
-
-    `${
-      cards.length > 6
-        ? ' · top 6 shown'
-        : ''
-    }` +
-
+  status.textContent=
+    `${cards.length} active favorite${cards.length===1?'':'s'}` +
+    `${cards.length>6?' · top 6 shown':''}` +
     ` · ` +
-
     `${
       failed
-        ? (
-          `${failed} feed` +
-          `${failed === 1 ? '' : 's'}` +
-          ` unavailable · `
-        )
+        ? `${failed} feed${failed===1?'':'s'} unavailable · `
         : ''
     }` +
-
-    `14-day rule`;
-
+    `7-day rule · football stays active in season`;
 }
 
-
-/* =========================================================
-   START
-   ========================================================= */
 
 loadAroundSports();
 loadWeather();
@@ -4128,19 +2479,18 @@ loadSports();
 
 setInterval(
   loadWeather,
-  15 * 60 * 1000
+  15*60*1000
 );
 
 setInterval(
   loadSports,
-  60 * 1000
+  60*1000
 );
 
 setInterval(
   loadAroundSports,
-  60 * 1000
+  60*1000
 );
-
 </script>
 
 </body>
