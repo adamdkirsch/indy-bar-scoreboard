@@ -497,8 +497,8 @@
     padding:.52vh .5vw;
     min-height:0;
     display:grid;
-    grid-template-columns:2.0vw 1fr;
-    gap:.42vw;
+    grid-template-columns:2.35vw 1fr;
+    gap:.5vw;
     align-items:center;
     overflow:hidden;
   }
@@ -511,26 +511,26 @@
   }
 
   .leagueLogoWrap{
-    width:1.8vw;
-    height:1.8vw;
-    border-radius:.36vw;
+    width:2.15vw;
+    height:2.15vw;
+    border-radius:.42vw;
     background:rgba(245,248,251,.92);
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:.17vw;
+    padding:.18vw;
     overflow:hidden
   }
 
   .leagueLogo{
-    max-width:1.5vw;
-    max-height:1.5vw;
+    max-width:1.82vw;
+    max-height:1.82vw;
     object-fit:contain
   }
 
   .leagueLogoFallback{
     display:none;
-    font-size:.4vw;
+    font-size:.44vw;
     font-weight:950;
     color:#162331;
     text-align:center;
@@ -543,33 +543,41 @@
 
   .scoreboardLine{
     display:grid;
-    grid-template-columns:1.95vw minmax(0,1fr) 1.65vw .38vw 1.65vw minmax(0,1fr) 1.95vw;
-    gap:.22vw;
+    grid-template-columns:
+      2.2vw
+      minmax(0,5.9vw)
+      1.65vw
+      .38vw
+      1.65vw
+      minmax(0,5.9vw)
+      2.2vw;
+    justify-content:center;
+    gap:.28vw;
     align-items:center;
     min-width:0;
   }
 
   .aroundTeamLogoWrap{
-    width:1.8vw;
-    height:1.8vw;
-    border-radius:.31vw;
+    width:2.15vw;
+    height:2.15vw;
+    border-radius:.38vw;
     background:rgba(245,248,251,.94);
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:.12vw;
+    padding:.14vw;
     overflow:hidden
   }
 
   .aroundTeamLogo{
-    max-width:1.55vw;
-    max-height:1.55vw;
+    max-width:1.86vw;
+    max-height:1.86vw;
     object-fit:contain
   }
 
   .aroundTeamLogoFallback{
     display:none;
-    font-size:.38vw;
+    font-size:.42vw;
     font-weight:950;
     color:#162331;
     text-align:center;
@@ -577,8 +585,8 @@
   }
 
   .aroundTeam{
-    font-size:.78vw;
-    font-weight:820;
+    font-size:.94vw;
+    font-weight:840;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
