@@ -1237,7 +1237,7 @@ async function loadWeather(){
 }
 
 function competition(ev){
-  return ev?.competitions?.[0] || {};
+  return ev?._detailCompetition || ev?.competitions?.[0] || {};
 }
 
 function eventDate(ev){
@@ -1477,6 +1477,34 @@ async function fetchJson(url){
   return r.json();
 }
 
+async function hydrateLiveEvent(t,ev){
+  if(!ev?.id) return;
+
+  try{
+    const data=await fetchJson(
+      `${ESPN_BASE}/${t.sport}/${t.league}/summary?event=${ev.id}`
+    );
+
+    const freshCompetition=
+      data?.header?.competitions?.[0];
+
+    if(freshCompetition){
+      ev._detailCompetition=freshCompetition;
+
+      const freshNetwork=
+        networkOf({
+          competitions:[freshCompetition]
+        });
+
+      if(freshNetwork && freshNetwork!=='TV TBD'){
+        ev._resolvedNetwork=freshNetwork;
+      }
+    }
+  }catch(e){
+    // Keep the schedule event as a fallback if the detail call fails.
+  }
+}
+
 async function fallbackNetworkForEvent(t,ev){
   if(!ev?.id || networkOf(ev)!=='TV TBD'){
     return networkOf(ev);
@@ -1557,6 +1585,10 @@ async function fetchTeamBundle(t){
 
   await Promise.all(
     relevant.map(async e=>{
+      if(eventState(e)==='in'){
+        await hydrateLiveEvent(t,e);
+      }
+
       if(networkOf(e)==='TV TBD'){
         const n=await fallbackNetworkForEvent(t,e);
 
@@ -1664,7 +1696,13 @@ function buildCard(bundle){
   let headline='';
 
   if(isLive || chosen.kind==='final'){
-    headline=`${scoreValue(me)} – ${scoreValue(opp)}`;
+    const myScore=scoreValue(me);
+    const oppScore=scoreValue(opp);
+
+    headline=
+      myScore!=='' && oppScore!==''
+        ? `${myScore} – ${oppScore}`
+        : (isLive ? 'LIVE' : 'FINAL');
   }else{
     headline=fmtTime(eventDate(ev));
   }
@@ -2716,4 +2754,3 @@ setInterval(loadSports,60*1000);
 setInterval(loadAroundSports,60*1000);
 </script>
 </body>
-</html>
