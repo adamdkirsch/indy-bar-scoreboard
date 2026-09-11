@@ -112,64 +112,101 @@ body{
   opacity:.72
 }
 
-.weatherRow{
+.weatherGlance{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:1.6vw;
+  height:100%;
+  position:relative;
+  z-index:1
+}
+
+.weatherCurrent{
   display:flex;
   align-items:center;
   gap:1vw;
-  position:relative;
-  z-index:1
+  min-width:0
 }
 
 .weatherIcon{
-  font-size:2.3vw;
-  width:2.9vw;
+  font-size:3vw;
+  width:3.5vw;
   text-align:center;
-  filter:drop-shadow(0 0 .35vw rgba(var(--weather-rgb),.35))
+  line-height:1;
+  filter:drop-shadow(0 0 .4vw rgba(var(--weather-rgb),.35))
 }
 
 .temp{
-  font-size:2.65vw;
-  font-weight:850;
-  line-height:1;
+  font-size:3.45vw;
+  font-weight:900;
+  line-height:.92;
+  letter-spacing:-.045em;
   text-shadow:0 0 .75vw rgba(var(--weather-rgb),.28)
 }
 
+.weatherCopy{
+  min-width:0
+}
+
 .weatherCity{
-  font-size:1.1vw;
-  font-weight:800
+  font-size:1.03vw;
+  font-weight:820;
+  color:#dbe5ed
 }
 
 .weatherText{
-  font-size:.92vw;
-  color:#c1cbd4;
-  margin-top:.25vh
+  font-size:1.12vw;
+  color:#f2f6f9;
+  font-weight:850;
+  margin-top:.24vh;
+  white-space:nowrap
 }
 
-.hourly{
-  display:flex;
-  gap:1vw;
-  margin-top:.62vh;
+.feelsLike{
+  font-size:.76vw;
   color:#9fb0bf;
-  font-size:.69vw;
-  white-space:nowrap;
-  position:relative;
-  z-index:1
+  font-weight:720;
+  margin-top:.27vh;
+  white-space:nowrap
 }
 
-.sunLine{
+.sunPanel{
   display:flex;
-  gap:1vw;
-  margin-top:.45vh;
-  font-size:.64vw;
-  color:#9fb0bf;
-  position:relative;
-  z-index:1
+  align-items:center;
+  justify-content:flex-end;
+  gap:.9vw;
+  min-width:13.5vw
 }
 
-.sunStatus{
-  font-weight:900;
+.sunMoonIcon{
+  width:3.5vw;
+  text-align:center;
+  font-size:3vw;
+  line-height:1;
+  filter:drop-shadow(0 0 .35vw rgba(232,190,88,.22))
+}
+
+.sunCopy{
+  text-align:left;
+  min-width:8.7vw
+}
+
+.sunAction{
+  font-size:1.12vw;
+  color:#f2f6f9;
+  font-weight:880;
+  white-space:nowrap
+}
+
+.sunCountdown{
+  font-size:1.45vw;
+  line-height:1;
+  margin-top:.3vh;
+  font-weight:950;
+  letter-spacing:-.02em;
   color:#e8bd72;
-  letter-spacing:.06em
+  white-space:nowrap
 }
 
 .brandMain{
@@ -808,21 +845,24 @@ body{
     </div>
 
     <div class="topbox weatherBox" id="weatherBox">
-      <div class="weatherRow">
-        <div class="weatherIcon" id="weatherIcon">◌</div>
-        <div class="temp" id="temp">--°</div>
-        <div>
-          <div class="weatherCity">Indianapolis</div>
-          <div class="weatherText" id="weatherText">Loading weather…</div>
+      <div class="weatherGlance">
+        <div class="weatherCurrent">
+          <div class="weatherIcon" id="weatherIcon">◌</div>
+          <div class="temp" id="temp">--°</div>
+          <div class="weatherCopy">
+            <div class="weatherCity">Indianapolis</div>
+            <div class="weatherText" id="weatherText">Loading weather…</div>
+            <div class="feelsLike" id="feelsLike">Feels like —</div>
+          </div>
         </div>
-      </div>
 
-      <div class="hourly" id="hourly"></div>
-
-      <div class="sunLine">
-        <span id="sunrise">Sunrise —</span>
-        <span id="sunset">Sunset —</span>
-        <span class="sunStatus" id="sunStatus">—</span>
+        <div class="sunPanel">
+          <div class="sunMoonIcon" id="sunMoonIcon">☀</div>
+          <div class="sunCopy">
+            <div class="sunAction" id="sunAction">Sun sets in</div>
+            <div class="sunCountdown" id="sunCountdown">—</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1130,109 +1170,140 @@ function weatherAccent(code){
   return '143,199,242';
 }
 
-function indyClockMinutes(){
-  const parts=new Intl.DateTimeFormat('en-US',{
-    timeZone:TZ,
-    hour:'2-digit',
-    minute:'2-digit',
-    hour12:false
-  }).formatToParts(new Date());
+let sunTimes={
+  sunriseToday:null,
+  sunsetToday:null,
+  sunriseTomorrow:null
+};
 
-  const o=Object.fromEntries(parts.map(p=>[p.type,p.value]));
-  return Number(o.hour)*60+Number(o.minute);
+function moonPhaseEmoji(date=new Date()){
+  /*
+    Approximate lunar phase from a known new moon.
+    More than sufficient for an at-a-glance dashboard icon.
+  */
+  const synodicMonth=29.53058867;
+  const knownNewMoon=Date.UTC(2000,0,6,18,14,0);
+  const ageDays=((date.getTime()-knownNewMoon)/86400000)%synodicMonth;
+  const normalized=(ageDays+synodicMonth)%synodicMonth;
+  const phase=normalized/synodicMonth;
+
+  if(phase<0.0625 || phase>=0.9375) return '🌑';
+  if(phase<0.1875) return '🌒';
+  if(phase<0.3125) return '🌓';
+  if(phase<0.4375) return '🌔';
+  if(phase<0.5625) return '🌕';
+  if(phase<0.6875) return '🌖';
+  if(phase<0.8125) return '🌗';
+  return '🌘';
 }
 
-function localIsoMinutes(iso){
-  const m=String(iso||'').match(/T(\d{2}):(\d{2})/);
-  return m ? Number(m[1])*60+Number(m[2]) : null;
+function countdownText(target,now=new Date()){
+  if(!target) return '—';
+
+  const totalMinutes=Math.max(
+    0,
+    Math.ceil((target.getTime()-now.getTime())/60000)
+  );
+
+  const hours=Math.floor(totalMinutes/60);
+  const minutes=totalMinutes%60;
+
+  return `${hours}:${String(minutes).padStart(2,'0')}`;
 }
 
-function formatLocalIsoTime(iso){
-  const mins=localIsoMinutes(iso);
-  if(mins==null) return '—';
+function updateSunPanel(){
+  const now=new Date();
 
-  const h=Math.floor(mins/60);
-  const m=mins%60;
-  const suffix=h>=12?'PM':'AM';
-  const h12=h%12||12;
+  const rise=sunTimes.sunriseToday;
+  const set=sunTimes.sunsetToday;
+  const nextRise=sunTimes.sunriseTomorrow;
 
-  return `${h12}:${String(m).padStart(2,'0')} ${suffix}`;
+  if(!rise || !set){
+    document.getElementById('sunMoonIcon').textContent='◌';
+    document.getElementById('sunAction').textContent='Sun timing';
+    document.getElementById('sunCountdown').textContent='—';
+    return;
+  }
+
+  const beforeRise=now<rise;
+  const daylight=now>=rise && now<set;
+
+  if(daylight){
+    document.getElementById('sunMoonIcon').textContent='☀';
+    document.getElementById('sunAction').textContent='Sun sets in';
+    document.getElementById('sunCountdown').textContent=
+      countdownText(set,now);
+    return;
+  }
+
+  document.getElementById('sunMoonIcon').textContent=
+    moonPhaseEmoji(now);
+
+  document.getElementById('sunAction').textContent='Sun rises in';
+
+  const target=
+    beforeRise
+      ? rise
+      : nextRise;
+
+  document.getElementById('sunCountdown').textContent=
+    countdownText(target,now);
 }
 
 async function loadWeather(){
   try{
-    const url='https://api.open-meteo.com/v1/forecast?latitude=39.7684&longitude=-86.1581&current=temperature_2m,apparent_temperature,weather_code&hourly=temperature_2m,precipitation_probability,weather_code&daily=sunrise,sunset&temperature_unit=fahrenheit&timezone=America%2FIndiana%2FIndianapolis&forecast_days=2';
+    const url=
+      'https://api.open-meteo.com/v1/forecast?latitude=39.7684&longitude=-86.1581&current=temperature_2m,apparent_temperature,weather_code&daily=sunrise,sunset&temperature_unit=fahrenheit&timezone=America%2FIndiana%2FIndianapolis&forecast_days=2&timeformat=unixtime';
 
     const r=await fetch(url,{cache:'no-store'});
+
     if(!r.ok) throw new Error('weather');
 
     const w=await r.json();
     const [label,icon]=weatherLabel(w.current.weather_code);
 
-    document.getElementById('weatherBox').style.setProperty(
-      '--weather-rgb',
-      weatherAccent(w.current.weather_code)
-    );
+    document
+      .getElementById('weatherBox')
+      .style
+      .setProperty(
+        '--weather-rgb',
+        weatherAccent(w.current.weather_code)
+      );
 
     document.getElementById('temp').textContent=
       `${Math.round(w.current.temperature_2m)}°`;
 
     document.getElementById('weatherIcon').textContent=icon;
+    document.getElementById('weatherText').textContent=label;
 
-    document.getElementById('weatherText').textContent=
-      `${label} · Feels like ${Math.round(w.current.apparent_temperature)}°`;
+    document.getElementById('feelsLike').textContent=
+      `Feels like ${Math.round(w.current.apparent_temperature)}°`;
 
-    const now=Date.now();
-    const points=[];
+    const rises=w.daily?.sunrise||[];
+    const sets=w.daily?.sunset||[];
 
-    for(let i=0;i<w.hourly.time.length && points.length<4;i++){
-      const x=new Date(w.hourly.time[i]);
+    sunTimes={
+      sunriseToday:rises[0] ? new Date(Number(rises[0])*1000) : null,
+      sunsetToday:sets[0] ? new Date(Number(sets[0])*1000) : null,
+      sunriseTomorrow:rises[1] ? new Date(Number(rises[1])*1000) : null
+    };
 
-      if(x.getTime()>now){
-        points.push({
-          t:x,
-          temp:w.hourly.temperature_2m[i],
-          rain:w.hourly.precipitation_probability[i]
-        });
-      }
-    }
-
-    document.getElementById('hourly').innerHTML=
-      points.map((p,i)=>{
-        const h=new Intl.DateTimeFormat('en-US',{
-          timeZone:TZ,
-          hour:'numeric'
-        }).format(p.t);
-
-        return `<span>${h} ${Math.round(p.temp)}°${i===0 && p.rain!=null ? ` · Rain ${p.rain}%` : ''}</span>`;
-      }).join('');
-
-    const rise=w.daily?.sunrise?.[0];
-    const set=w.daily?.sunset?.[0];
-
-    document.getElementById('sunrise').textContent=
-      `Sunrise ${formatLocalIsoTime(rise)}`;
-
-    document.getElementById('sunset').textContent=
-      `Sunset ${formatLocalIsoTime(set)}`;
-
-    const n=indyClockMinutes();
-    const rmin=localIsoMinutes(rise);
-    const smin=localIsoMinutes(set);
-
-    const up=
-      rmin!=null &&
-      smin!=null &&
-      n>=rmin &&
-      n<smin;
-
-    document.getElementById('sunStatus').textContent=
-      up ? '☀ SUN UP' : '☾ SUN DOWN';
+    updateSunPanel();
 
   }catch(e){
     document.getElementById('weatherText').textContent=
-      'Weather temporarily unavailable';
-    document.getElementById('hourly').innerHTML='';
+      'Weather unavailable';
+
+    document.getElementById('feelsLike').textContent=
+      'Feels like —';
+
+    sunTimes={
+      sunriseToday:null,
+      sunsetToday:null,
+      sunriseTomorrow:null
+    };
+
+    updateSunPanel();
   }
 }
 
@@ -2750,7 +2821,9 @@ loadWeather();
 loadSports();
 
 setInterval(loadWeather,15*60*1000);
+setInterval(updateSunPanel,60*1000);
 setInterval(loadSports,60*1000);
 setInterval(loadAroundSports,60*1000);
 </script>
 </body>
+</html>
