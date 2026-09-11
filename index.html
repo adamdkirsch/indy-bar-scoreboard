@@ -537,7 +537,6 @@ body{
     inset 0 1px 0 rgba(255,255,255,.86)
 }
 
-/* no more isolated white logo boxes */
 .leagueLogoWrap{
   width:2.15vw;
   height:2.15vw;
@@ -567,7 +566,6 @@ body{
 
 .matchupBox{min-width:0}
 
-/* Away unit stays left, home unit stays right, score/time remains fixed dead center. */
 .scoreboardLine{
   display:grid;
   grid-template-columns:
@@ -1177,10 +1175,6 @@ let sunTimes={
 };
 
 function moonPhaseEmoji(date=new Date()){
-  /*
-    Approximate lunar phase from a known new moon.
-    More than sufficient for an at-a-glance dashboard icon.
-  */
   const synodicMonth=29.53058867;
   const knownNewMoon=Date.UTC(2000,0,6,18,14,0);
   const ageDays=((date.getTime()-knownNewMoon)/86400000)%synodicMonth;
@@ -1572,7 +1566,6 @@ async function hydrateLiveEvent(t,ev){
       }
     }
   }catch(e){
-    // Keep the schedule event as a fallback if the detail call fails.
   }
 }
 
@@ -1746,10 +1739,60 @@ function buildUpcomingCard(bundle,ev){
     logo:bundle.logo,
     badge:'NEXT',
     match:opponentText(ev,t.teamId),
-    headline:fmtTime(eventDate(ev)),
+    headline:favoriteUpcomingHeadline(eventDate(ev)),
     detail:fmtShortDateTime(eventDate(ev)),
     network:networkOf(ev)
   };
+}
+
+function favoriteUpcomingHeadline(d){
+  const diffMs=d.getTime()-Date.now();
+
+  if(diffMs<=24*60*60*1000){
+    const parts=new Intl.DateTimeFormat(
+      'en-US',
+      {
+        timeZone:TZ,
+        hour:'numeric',
+        minute:'2-digit',
+        hour12:true
+      }
+    ).formatToParts(d);
+
+    const values=
+      Object.fromEntries(
+        parts.map(p=>[p.type,p.value])
+      );
+
+    const hour=Number(values.hour);
+    const minute=Number(values.minute);
+    const period=values.dayPeriod;
+
+    if(hour===12 && minute===0 && period==='PM'){
+      return 'NOON';
+    }
+
+    if(hour===12 && minute===0 && period==='AM'){
+      return 'MIDNIGHT';
+    }
+
+    return new Intl.DateTimeFormat(
+      'en-US',
+      {
+        timeZone:TZ,
+        hour:'numeric',
+        minute:'2-digit'
+      }
+    ).format(d);
+  }
+
+  return new Intl.DateTimeFormat(
+    'en-US',
+    {
+      timeZone:TZ,
+      weekday:'short'
+    }
+  ).format(d).toUpperCase();
 }
 
 function buildCard(bundle){
@@ -1775,7 +1818,10 @@ function buildCard(bundle){
         ? `${myScore} – ${oppScore}`
         : (isLive ? 'LIVE' : 'FINAL');
   }else{
-    headline=fmtTime(eventDate(ev));
+    headline=
+      favoriteUpcomingHeadline(
+        eventDate(ev)
+      );
   }
 
   let detail='';
@@ -2217,6 +2263,10 @@ function aroundImportance(g){
 
   pts+=ranked*18;
 
+  if(g.league==='NCAA Football' && ranked>0){
+    pts+=55;
+  }
+
   if(g.awayRank>0 && g.awayRank<=10) pts+=9;
   if(g.homeRank>0 && g.homeRank<=10) pts+=9;
 
@@ -2522,6 +2572,16 @@ async function fetchEspnAround(sport,league,label,dates){
     .map(e=>normalizeEspnAround(e,label));
 }
 
+async function fetchEspnCollegeFootball(dates){
+  const url=
+    `${ESPN_BASE}/football/college-football/scoreboard?dates=${dates}&groups=80&limit=100`;
+
+  const data=await fetchJson(url);
+
+  return (data.events||[])
+    .map(e=>normalizeEspnAround(e,'NCAA Football'));
+}
+
 async function fetchNcaaToday(sport,division,label){
   try{
     const data=
@@ -2555,22 +2615,29 @@ function espnDateString(d=new Date()){
 }
 
 async function loadAroundSports(){
+  const nowDate=new Date();
+
   const weekday=
-    new Intl.DateTimeFormat('en-US',{
-      timeZone:TZ,
-      weekday:'short'
-    }).format(new Date());
+    new Intl.DateTimeFormat(
+      'en-US',
+      {
+        timeZone:TZ,
+        weekday:'short'
+      }
+    ).format(nowDate);
 
-  const dow=
-    weekday==='Sat'
-      ? 6
-      : (
-          weekday==='Sun'
-            ? 0
-            : new Date().getDay()
-        );
+  const dowMap={
+    Sun:0,
+    Mon:1,
+    Tue:2,
+    Wed:3,
+    Thu:4,
+    Fri:5,
+    Sat:6
+  };
 
-  const dates=espnDateString();
+  const dow=dowMap[weekday];
+  const dates=espnDateString(nowDate);
 
   const jobs=[
     fetchEspnAround('baseball','mlb','MLB',dates),
@@ -2579,12 +2646,36 @@ async function loadAroundSports(){
     fetchEspnAround('basketball','wnba','WNBA',dates)
   ];
 
-  if(dow===6){
+  const month=Number(
+    new Intl.DateTimeFormat(
+      'en-US',
+      {
+        timeZone:TZ,
+        month:'numeric'
+      }
+    ).format(nowDate)
+  );
+
+  const collegeFootballSeason=
+    month>=8 || month===1;
+
+  const collegeFootballWindow=
+    collegeFootballSeason &&
+    (dow===4 || dow===5 || dow===6);
+
+  if(collegeFootballWindow){
     jobs.push(
-      fetchNcaaToday(
-        'football',
-        'fbs',
-        'NCAA Football'
+      fetchEspnCollegeFootball(dates)
+    );
+
+    const yesterday=
+      new Date(
+        nowDate.getTime()-86400000
+      );
+
+    jobs.push(
+      fetchEspnCollegeFootball(
+        espnDateString(yesterday)
       )
     );
   }else{
@@ -2616,25 +2707,60 @@ async function loadAroundSports(){
     }
   }
 
+  const seenGames=new Set();
+
+  games=
+    games.filter(g=>{
+      const key=
+        `${g.league}|${g.away}|${g.home}|${g.date.getTime()}`;
+
+      if(seenGames.has(key)){
+        return false;
+      }
+
+      seenGames.add(key);
+      return true;
+    });
+
   const now=Date.now();
 
   games=
     games.filter(g=>{
-      if(g.state==='live') return true;
+      if(g.state==='live'){
+        return true;
+      }
 
       const diff=
         (g.date.getTime()-now)/3600000;
 
+      const rankedCfb=
+        g.league==='NCAA Football' &&
+        (
+          g.awayRank>0 ||
+          g.homeRank>0
+        );
+
       if(g.state==='pre'){
         return diff>=-1 && diff<=18;
+      }
+
+      if(rankedCfb){
+        return diff>=-30 && diff<=2;
       }
 
       return diff>=-8 && diff<=2;
     });
 
   games.sort((a,b)=>{
-    const liveA=a.state==='live' ? 1 : 0;
-    const liveB=b.state==='live' ? 1 : 0;
+    const liveA=
+      a.state==='live'
+        ? 1
+        : 0;
+
+    const liveB=
+      b.state==='live'
+        ? 1
+        : 0;
 
     if(liveA!==liveB){
       return liveB-liveA;
@@ -2644,13 +2770,17 @@ async function loadAroundSports(){
       aroundImportance(b)-
       aroundImportance(a);
 
-    if(imp) return imp;
+    if(imp){
+      return imp;
+    }
 
     const state=
       aroundStatusRank(a)-
       aroundStatusRank(b);
 
-    if(state) return state;
+    if(state){
+      return state;
+    }
 
     return a.date-b.date;
   });
@@ -2663,7 +2793,10 @@ async function loadAroundSports(){
     title='NFL Sunday';
   }
 
-  renderAroundGames(games,title);
+  renderAroundGames(
+    games,
+    title
+  );
 }
 
 function isTodayInIndy(d){
@@ -2762,13 +2895,6 @@ async function loadSports(){
     return eventDate(a.ev)-eventDate(b.ev);
   });
 
-  /*
-    Do not force six cards.
-    If the normal seven-day/football rules produce fewer than six,
-    use the nearest future game within 30 days to fill open space.
-    That lets an in-season Fever game appear here without dragging
-    distant football or basketball schedules into a quiet month.
-  */
   const cards=[...primaryCards];
 
   if(cards.length<6){
